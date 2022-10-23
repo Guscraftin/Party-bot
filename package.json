@@ -1,0 +1,31 @@
+{
+  "name": "party-bot",
+  "version": "0.1.0",
+  "description": "Bot privée pour le hub party",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Guscraftin-Dev/Party-bot.git"
+  },
+  "keywords": [
+    "bot",
+    "private",
+    "discord",
+    "party"
+  ],
+  "author": "Guscraftin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Guscraftin-Dev/Party-bot/issues"
+  },
+  "homepage": "https://github.com/Guscraftin-Dev/Party-bot#readme",
+  "dependencies": {
+    "discord.js": "^14.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.26.0"
+  }
+}
