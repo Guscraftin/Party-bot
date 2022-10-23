@@ -1,7 +1,8 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { Client, Collection, GatewayIntentBits } = require("discord.js");
-const { token } = require("./config.json");
+const { token, database_uri } = require("./config.json");
+const mongoose = require("mongoose");
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -33,6 +34,15 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
+
+
+mongoose.connect(database_uri, {
+	autoIndex: false,
+	maxPoolSize: 10,
+	serverSelectionTimeoutMS: 5000,
+	socketTimeoutMS: 45000,
+	family: 4,
+}).then(() => console.log("Connected to database.")).catch(err => console.error(err));
 
 
 client.login(token);
