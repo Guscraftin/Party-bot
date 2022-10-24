@@ -4,7 +4,10 @@
   "description": "Bot privée pour le hub party",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "npm run lint && node deploy-commands.js",
+    "start": "npm run lint && node .",
+    "lint": "eslint '*.js' '**/*.js'",
+    "lint:fix": "eslint '*.js' '**/*.js' --fix"
   },
   "repository": {
     "type": "git",
@@ -23,10 +26,14 @@
   },
   "homepage": "https://github.com/Guscraftin-Dev/Party-bot#readme",
   "dependencies": {
-    "discord.js": "^14.6.0",
-    "mongoose": "^6.6.7"
+    "discord.js": "14.6.0",
+    "mongoose": "6.6.7"
   },
   "devDependencies": {
-    "eslint": "^8.26.0"
+    "eslint": "^8.26.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.7.1"
   }
 }
