@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Guscraftin-Dev/Party-bot.git"
+    "url": "git+https://github.com/Guscraftin/Party-bot.git"
   },
   "keywords": [
     "bot",
@@ -22,9 +22,9 @@
   "author": "Guscraftin",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Guscraftin-Dev/Party-bot/issues"
+    "url": "https://github.com/Guscraftin/Party-bot/issues"
   },
-  "homepage": "https://github.com/Guscraftin-Dev/Party-bot#readme",
+  "homepage": "https://github.com/Guscraftin/Party-bot#readme",
   "dependencies": {
     "discord.js": "14.6.0",
     "mongoose": "6.6.7"
