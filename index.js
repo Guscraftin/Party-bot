@@ -36,6 +36,23 @@ for (const file of eventFiles) {
 }
 
 
+process.on("exit", code => {
+    console.log(`Exiting with code ${code}`);
+});
+
+process.on("uncaughtException", (err, origin) => {
+    console.error(`Uncaught exception: ${err}`);
+    console.error(`Origin: ${origin}`);
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+    console.error(`Unhandled rejection: ${reason}`);
+    console.error(`Promise: ${promise}`);
+});
+
+process.on("warning", (...args) => console.log(...args));
+
+
 mongoose.connect(database_uri, {
     autoIndex: false,
     maxPoolSize: 10,
