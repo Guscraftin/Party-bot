@@ -1,5 +1,7 @@
 const CateSoiree = require("./models");
 
+// Returner les messages si succès ou échecs
+
 async function getInfoCate(idCate) {
     const cateData = await CateSoiree.findOne({ idCate: idCate });
     return cateData;
@@ -8,6 +10,11 @@ async function getInfoCate(idCate) {
 function createCate(idCate, idOrga) {
     const newCate = new CateSoiree({ idCate: idCate, idOrga: idOrga });
     newCate.save().then(u => console.log(`Nouvelle soiree -> ${u.idCate} organisé par ${u.idOrga} !`));
+}
+
+async function deleteCate(idCate) {
+    const deletedCate = await getInfoCate(idCate);
+    return deletedCate.remove({ id: idCate }).then(u => console.log(`Soirée a pris fin -> ${u.idCate} a été organisé par ${u.idOrga} !`));
 }
 
 async function updateCate(idCate, settings) {
@@ -19,19 +26,35 @@ async function updateCate(idCate, settings) {
     return cateData.updateOne(settings);
 }
 
-async function addInvite(idCate, idMember) {
-    idCate = await getInfoCate(idCate);
-    if (idCate.listIdInvite.find(idMember) != undefined) return; // Warn quand un membre est déjà présent dans la caté
-    idCate.listIdInvite.push(idMember);
-    updateCate(idCate, { listIdInvite: idCate.listIdInvite });
+
+// For orga people
+
+async function isAddInvite(idCate, idMember) {
+    const cateData = await getInfoCate(idCate);
+    if (cateData.listIdInvite.find(element => element == idMember) === undefined) {
+        cateData.listIdInvite.push(idMember);
+        updateCate(idCate, { listIdInvite: cateData.listIdInvite });
+        return true;
+    } else {
+        return false;
+    }
 }
 
-async function removeInvite(idCate, idMember) {
-    idCate = await getInfoCate(idCate);
-    const indexMember = idCate.listIdInvite.indexOf(idMember);
-    if (indexMember == -1) return; // Warn quand un membre n'est déjà pas présent dans la caté
-    idCate.listIdInvite.slice(indexMember, 1);
-    updateCate(idCate, { listIdInvite: idCate.listIdInvite });
+async function isRemoveInvite(idCate, idMember) {
+    const cateData = await getInfoCate(idCate);
+    const indexMember = cateData.listIdInvite.indexOf(idMember);
+    if (indexMember !== -1) {
+        cateData.listIdInvite.splice(indexMember, 1);
+        updateCate(idCate, { listIdInvite: cateData.listIdInvite });
+        return true;
+    } else {
+        return false;
+    }
 }
 
-module.exports = { getInfoCate, createCate, updateCate, addInvite, removeInvite };
+async function isOrgaCate(idCate, idMember) {
+    const cateData = await getInfoCate(idCate);
+    return cateData.idOrga == idMember;
+}
+
+module.exports = { getInfoCate, createCate, deleteCate, updateCate, isAddInvite, isRemoveInvite, isOrgaCate };
