@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
-const { isOrgaCate, isAddInvite, isRemoveInvite } = require("../utils/utilities");
+const { isOrgaCate, isAddInvite, isRemoveInvite } = require("../../utils/utilities");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -14,6 +14,7 @@ module.exports = {
             subcommand.setName("retirer")
                 .setDescription("Pour retirer un membre à sa soirée (sa catégorie).")
                 .addUserOption(option => option.setName("membre").setDescription("Le membre à retirer").setRequired(true))),
+
     async execute(interaction) {
         const channelId = interaction.channelId;
         const channelPromise = interaction.client.channels.fetch(channelId);

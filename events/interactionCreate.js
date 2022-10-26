@@ -18,8 +18,20 @@ module.exports = {
                 console.error(error);
             }
         }
-        // else if (interaction.isButton()) {
+        else if (interaction.isButton()) {
+            const { buttons } = interaction.client;
+            const { customId } = interaction;
+            const button = buttons.get(customId);
+            if (!button) return new Error("There is no code for this button.");
 
-        // }
+            try {
+                await button.execute(interaction);
+            } catch (error) {
+                console.error(`Erreur d'exécution du boutton : ${interaction.customId}`);
+                console.error(error);
+            }
+        } else {
+            console.log("Interaction inconnu !");
+        }
     },
 };

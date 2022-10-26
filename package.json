@@ -6,8 +6,8 @@
   "scripts": {
     "deploy": "npm run lint && node deploy-commands.js",
     "start": "npm run lint && node .",
-    "lint": "eslint '*.js' '**/*.js'",
-    "lint:fix": "eslint '*.js' '**/*.js' --fix"
+    "lint": "eslint '*.js' '**/*.js' '**/**/*.js'",
+    "lint:fix": "eslint '*.js' '**/*.js' '**/**/*.js' --fix"
   },
   "repository": {
     "type": "git",

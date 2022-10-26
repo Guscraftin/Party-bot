@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require("discord.js");
-const { createCate, isAddInvite, isRemoveInvite, deleteCate } = require("../utils/utilities");
+const { createCate, isAddInvite, isRemoveInvite, deleteCate } = require("../../utils/utilities");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -39,6 +39,7 @@ module.exports = {
             option.setName("membre")
                 .setDescription("Le membre invité"),
         ),
+
     async execute(interaction) {
         const typeInteraction = interaction.options.get("type_interaction");
         const channel = interaction.options.get("catégorie");
@@ -47,10 +48,10 @@ module.exports = {
         switch (typeInteraction.value) {
             case "createCate":
                 createCate(channel.value, interaction.member.id);
-                break;
+                return interaction.reply({ content: "L'interaction a bien été effectué !", ephemeral: true });
             case "deleteCate":
                 deleteCate(channel.value);
-                break;
+                return interaction.reply({ content: "L'interaction a bien été effectué !", ephemeral: true });
             case "addInvite":
                 if (!membre) return interaction.reply({ content: "Veuillez entrer un membre !", ephemeral: true });
                 if (await isAddInvite(channel.value, membre.id)) {
