@@ -6,8 +6,12 @@ module.exports = {
         name: "createCate",
     },
     async execute(interaction) {
+        let nameCate = "nobody";
+        if (interaction.member.nickname != null) nameCate = interaction.member.nickname;
+        else if (interaction.member.user.username) nameCate = interaction.member.user.username;
+
         const cate = await interaction.guild.channels.create({
-            name: `Soirée de ${interaction.member.nickname}`,
+            name: `Soirée de ${nameCate}`,
             type: ChannelType.GuildCategory,
             position: 0,
             permissionOverwrites: [
@@ -33,7 +37,6 @@ module.exports = {
                         PermissionFlagsBits.ManageThreads,
                         PermissionFlagsBits.ReadMessageHistory,
                         PermissionFlagsBits.SendTTSMessages,
-                        PermissionFlagsBits.ManageWebhooks,
                         PermissionFlagsBits.UseApplicationCommands,
                         PermissionFlagsBits.Connect,
                         PermissionFlagsBits.Speak,
