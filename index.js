@@ -1,8 +1,8 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { Client, Collection, GatewayIntentBits } = require("discord.js");
-// const { token, database_uri } = require("./config.json");
-const { tokenTest, database_uri } = require("./config.json");
+const { token, database_uri } = require("./config.json");
+// const { tokenTest, database_uri } = require("./config.json");
 const mongoose = require("mongoose");
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -93,5 +93,5 @@ mongoose.connect(database_uri, {
 }).then(() => console.log("Connected to database.")).catch(err => console.error(err));
 
 
-// client.login(token);
-client.login(tokenTest);
+client.login(token);
+// client.login(tokenTest);
