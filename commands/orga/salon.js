@@ -22,8 +22,8 @@ module.exports = {
     async execute(interaction) {
         const channelId = interaction.channelId;
         const channel = interaction.channel;
-        const cate = await channel.parent;
-        const cateId = cate.id;
+        const cate = channel.parent;
+        const cateId = channel.parentId;
 
         // Create channel
         let newChannel;
@@ -34,7 +34,8 @@ module.exports = {
             .setLabel("Supprimer ce salon")
             .setStyle(ButtonStyle.Danger);
 
-        if (!isOrgaCate(cateId, interaction.member.id)) return interaction.reply({ content: "Tu dois être l'organisateur de cette soirée (de cette catégorie) pour pouvoir gérer les salons !\nSi tu es organisateur et que tu veux gérer tes salons, tape cette commande dans la catégorie de ta soirée.", ephemeral: true });
+        if (!await isOrgaCate(cateId, interaction.member.id)) return interaction.reply({ content: "Tu dois être l'organisateur de cette soirée (de cette catégorie) pour pouvoir gérer les salons !\nSi tu es organisateur et que tu veux gérer tes salons, tape cette commande dans la catégorie de ta soirée.", ephemeral: true });
+
         switch (interaction.options.getSubcommand()) {
             case "verrouiller":
                 try {
