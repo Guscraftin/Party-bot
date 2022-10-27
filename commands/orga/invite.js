@@ -19,8 +19,8 @@ module.exports = {
         const channelId = interaction.channelId;
         const channelPromise = interaction.client.channels.fetch(channelId);
         const membre = interaction.options.getMember("membre");
-        let cateId = 0;
-        await channelPromise.then(channel => cateId = channel.parentId);
+        const cate = await channelPromise.then(categorie => categorie).catch(console.error);
+        const cateId = cate.parentId;
 
         if (membre === interaction.member) return interaction.reply({ content: "Vous ne pouvez pas gérer votre invitation car vous êtes déjà l'organisateur de cette soirée !", ephemeral: true });
         if (membre.user.bot) return interaction.reply({ content: "Vous ne pouvez pas gérer l'invitation d'un bot discord à votre soirée !", ephemeral: true });

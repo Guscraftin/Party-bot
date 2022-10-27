@@ -41,7 +41,7 @@ module.exports = {
         ),
 
     async execute(interaction) {
-        const typeInteraction = interaction.options.get("type_interaction");
+        const typeInteraction = interaction.options.getString("type_interaction");
         const channel = interaction.options.get("catégorie");
         const membre = interaction.options.get("membre");
 
