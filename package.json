@@ -4,7 +4,7 @@
   "description": "Bot privée pour le hub party",
   "main": "index.js",
   "scripts": {
-    "deploy": "npm run lint && node deploy-commands.js",
+    "deploy": "node deploy-commands.js",
     "start": "npm run lint && node .",
     "lint": "eslint '*.js' '**/*.js' '**/**/*.js'",
     "lint:fix": "eslint '*.js' '**/*.js' '**/**/*.js' --fix"
