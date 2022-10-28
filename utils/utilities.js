@@ -14,7 +14,7 @@ function createCate(idCate, idOrga) {
 
 async function deleteCate(idCate) {
     const deletedCate = await getInfoCate(idCate);
-    return deletedCate.remove({ id: idCate }).then(u => console.log(`Soirée a pris fin -> ${u.idCate} a été organisé par ${u.idOrga} !`));
+    deletedCate.remove({ id: idCate }).then(u => console.log(`Soirée a pris fin -> ${u.idCate} a été organisé par ${u.idOrga} !`));
 }
 
 async function updateCate(idCate, settings) {
