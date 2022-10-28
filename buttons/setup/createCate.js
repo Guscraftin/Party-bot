@@ -1,11 +1,20 @@
 const { ChannelType, PermissionFlagsBits } = require("discord.js");
-const { createCate } = require("../../utils/utilities");
+const { createCate, isMaxCate } = require("../../utils/utilities");
 
 module.exports = {
     data: {
         name: "createCate",
     },
     async execute(interaction) {
+        const maxCate = 3;
+
+        if (await isMaxCate(interaction.member.id, maxCate)) {
+            return interaction.reply({
+                content: `Tu ne peux plus créer de nouvelles soirées (catégorie) car tu as déjà \`${maxCate}\` catégories.`,
+                ephemeral: true,
+            });
+        }
+
         let nameCate = "nobody";
         if (interaction.member.nickname != null) nameCate = interaction.member.nickname;
         else if (interaction.member.user.username) nameCate = interaction.member.user.username;

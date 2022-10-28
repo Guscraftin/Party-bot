@@ -14,7 +14,6 @@ module.exports = {
             await channel.parent.children.cache.each(function(channel1) {
                 channel1.permissionOverwrites.delete(membre);
             });
-            return interaction.reply({ content: `<@${membre.id}> a bien été retiré de cette soirée !`, ephemeral: true });
         } else {
             return interaction.reply({ content: `<@${membre.id}> n'a pas pu être retiré de cette soirée !`, ephemeral: true });
         }

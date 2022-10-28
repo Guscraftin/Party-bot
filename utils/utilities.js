@@ -57,4 +57,9 @@ async function isOrgaCate(idCate, idMember) {
     return cateData.idOrga == idMember;
 }
 
-module.exports = { getInfoCate, createCate, deleteCate, updateCate, isAddInvite, isRemoveInvite, isOrgaCate };
+async function isMaxCate(idMember, maxCate) {
+    const catesMember = await CateSoiree.find({ idOrga: idMember });
+    return catesMember.length >= maxCate;
+}
+
+module.exports = { getInfoCate, createCate, deleteCate, updateCate, isAddInvite, isRemoveInvite, isOrgaCate, isMaxCate };
