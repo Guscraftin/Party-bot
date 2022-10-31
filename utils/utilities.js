@@ -1,14 +1,12 @@
 const CateSoiree = require("./models");
 
-// Returner les messages si succès ou échecs
-
 async function getInfoCate(idCate) {
     const cateData = await CateSoiree.findOne({ idCate: idCate });
     return cateData;
 }
 
-function createCate(idCate, idOrga) {
-    const newCate = new CateSoiree({ idCate: idCate, idOrga: idOrga });
+function createCate(idCate, idOrga, idPanel) {
+    const newCate = new CateSoiree({ idCate: idCate, idOrga: idOrga, idPanel: idPanel });
     newCate.save().then(u => console.log(`Nouvelle soiree -> ${u.idCate} organisé par ${u.idOrga} !`));
 }
 
@@ -57,9 +55,14 @@ async function isOrgaCate(idCate, idMember) {
     return cateData.idOrga == idMember;
 }
 
+async function isPanelOrga(idCate, idPanel) {
+    const cateData = await getInfoCate(idCate);
+    return cateData.idPanel == idPanel;
+}
+
 async function isMaxCate(idMember, maxCate) {
     const catesMember = await CateSoiree.find({ idOrga: idMember });
     return catesMember.length >= maxCate;
 }
 
-module.exports = { getInfoCate, createCate, deleteCate, updateCate, isAddInvite, isRemoveInvite, isOrgaCate, isMaxCate };
+module.exports = { getInfoCate, createCate, deleteCate, updateCate, isAddInvite, isRemoveInvite, isOrgaCate, isPanelOrga, isMaxCate };

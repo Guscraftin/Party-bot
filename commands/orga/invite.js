@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
-const { isOrgaCate, isAddInvite, isRemoveInvite } = require("../../utils/utilities");
+const { isOrgaCate, isAddInvite, isRemoveInvite, isPanelOrga } = require("../../utils/utilities");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -31,10 +31,12 @@ module.exports = {
                     await channel.parent.permissionOverwrites.create(membre, {
                         ViewChannel: true,
                     });
-                    await channel.parent.children.cache.each(function(channel1) {
-                        channel1.permissionOverwrites.create(membre, {
-                            ViewChannel: true,
-                        });
+                    await channel.parent.children.cache.each(async function(channel1) {
+                        if (!await isPanelOrga(cateId, channel1.id)) {
+                            channel1.permissionOverwrites.create(membre, {
+                                ViewChannel: true,
+                            });
+                        };
                     });
                     return interaction.reply({ content: `<@${membre.id}> a bien été ajouté sur votre liste d'invités pour votre soirée !`, ephemeral: true });
                 } else {

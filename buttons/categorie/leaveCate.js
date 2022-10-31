@@ -1,4 +1,4 @@
-const { isRemoveInvite } = require("../../utils/utilities");
+const { isRemoveInvite, isPanelOrga } = require("../../utils/utilities");
 
 module.exports = {
     data: {
@@ -9,18 +9,16 @@ module.exports = {
         const cateId = channel.parentId;
         const membre = interaction.member;
 
-        // Parcourir la liste des membres et comparé si c'est l'orga si oui on vérif si mp possible et on envoie
-        // console.log(interaction.guild.members.cache);
-        console.log(interaction.guild.members.fetch()
-            .then(console.log)
-            .catch(console.error));
-
-        // client.users.send('id', 'content');
-
         if (await isRemoveInvite(cateId, membre.id)) {
             await channel.parent.permissionOverwrites.delete(membre, `Par la volonté de l'invité (${membre.id}) !`);
             await channel.parent.children.cache.each(function(channel1) {
                 channel1.permissionOverwrites.delete(membre);
+            });
+
+            await channel.parent.children.cache.each(async function(channel1) {
+                if (await isPanelOrga(cateId, channel1.id)) {
+                    channel1.send(`<@${membre.id}> a quitté ta soirée !`);
+                }
             });
         } else {
             return interaction.reply({ content: `<@${membre.id}> n'a pas pu être retiré de cette soirée !`, ephemeral: true });
