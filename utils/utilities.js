@@ -52,12 +52,12 @@ async function isRemoveInvite(idCate, idMember) {
 
 async function isOrgaCate(idCate, idMember) {
     const cateData = await getInfoCate(idCate);
-    return cateData.idOrga == idMember;
+    return cateData.idOrga === idMember;
 }
 
 async function isPanelOrga(idCate, idPanel) {
     const cateData = await getInfoCate(idCate);
-    return cateData.idPanel == idPanel;
+    return cateData.idPanel === idPanel;
 }
 
 async function isMaxCate(idMember, maxCate) {

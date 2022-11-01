@@ -105,7 +105,7 @@ module.exports = {
             ],
         });
         const defaultChannel = await cate.children.create({
-            name: "Organisation interne",
+            name: "Discussion",
             type: ChannelType.GuildText,
         });
 
