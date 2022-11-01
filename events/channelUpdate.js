@@ -1,5 +1,6 @@
 const { Events, PermissionsBitField } = require("discord.js");
-const { isPanelOrga } = require("../utils/utilities");
+const { isPanelOrga, isOrgaCate, resetInvite, isAddInvite } = require("../utils/utilities");
+const { clientId, clientIdTest } = require("../config");
 
 module.exports = {
     name: Events.ChannelUpdate,
@@ -8,21 +9,20 @@ module.exports = {
         if (newChannel.type === 1 || newChannel.type === 3) return;
 
         let cate;
-        let isInCate;
         if (newChannel.type === 4) {
             cate = newChannel;
-            isInCate = true;
-        } else if (newChannel.parent == null) {
-            isInCate = false;
-        } else {
+        } else if (newChannel.parent != null) {
             cate = newChannel.parent;
-            isInCate = true;
         }
 
-        // Si perms voir à everyone est changé
-        if (oldChannel.permissionOverwrites.cache.get(newChannel.guild.id).allow.has(PermissionsBitField.Flags.ViewChannel)
-        != newChannel.permissionOverwrites.cache.get(newChannel.guild.id).allow.has(PermissionsBitField.Flags.ViewChannel)) {
-            if (newChannel.type === 4) { // Ajouter si modif les perms d'un salon ?
+        const listPermOld = oldChannel.permissionOverwrites.cache;
+        const listPermNew = newChannel.permissionOverwrites.cache;
+
+        // Modif perm caté
+        if (newChannel.type === 4) { // Ajouter si modif les perms d'un salon ?
+            // Si perms voir à everyone est changé
+            if (listPermOld.get(newChannel.guild.id).allow.has(PermissionsBitField.Flags.ViewChannel)
+            != listPermNew.get(newChannel.guild.id).allow.has(PermissionsBitField.Flags.ViewChannel)) {
                 cate.children.cache.each(async function(channel) {
                     if (await isPanelOrga(cate.id, channel.id)) {
                         await channel.send("Attention, tu permet à tout le monde de voir ou de ne plus voir cette catégorie !\n" +
@@ -31,15 +31,30 @@ module.exports = {
                     }
                 });
             }
-        }
 
+            // Si ajoute ou retire un membre à la caté ou salon (propager -> salon lock + actu db)
 
-        // Si ajoute ou retire un membre à la caté ou salon (propager + actu db)
-        // Attention dans un même push peut y avor plusieurs changements comme ajout + retrait pers et change perms
-        if (isInCate) {
-            console.log("oui c'est dans une caté");
-        } else {
-            console.log("Le salon modif n'est pas dans cate");
+            // Actu db
+            await resetInvite(cate.id);
+            await cate.permissionOverwrites.cache.each(async function(perm) {
+                if (perm.type === 1) {
+                    if (!await isOrgaCate(cate.id, perm.id) && perm.id !== clientId && perm.id !== clientIdTest) {
+                        if (await perm.allow.has(PermissionsBitField.Flags.ViewChannel)) {
+                            await isAddInvite(cate.id, perm.id);
+                        }
+                    }
+                }
+            });
+
+            // Propage change (pour les salons lock, on les resyncro avec la cate et on les relock)
+            await cate.children.cache.each(async function(channel1) {
+                if (!channel1.permissionsLocked && !await isPanelOrga(cate.id, channel1.id)) {
+                    await channel1.lockPermissions();
+                    await channel1.permissionOverwrites.edit(newChannel.guild.id, {
+                        SendMessages: false,
+                    });
+                }
+            });
         }
     },
 };

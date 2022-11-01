@@ -31,7 +31,7 @@ async function isAddInvite(idCate, idMember) {
     const cateData = await getInfoCate(idCate);
     if (cateData.listIdInvite.find(element => element == idMember) === undefined) {
         cateData.listIdInvite.push(idMember);
-        updateCate(idCate, { listIdInvite: cateData.listIdInvite });
+        await updateCate(idCate, { listIdInvite: cateData.listIdInvite });
         return true;
     } else {
         return false;
@@ -43,11 +43,17 @@ async function isRemoveInvite(idCate, idMember) {
     const indexMember = cateData.listIdInvite.indexOf(idMember);
     if (indexMember !== -1) {
         cateData.listIdInvite.splice(indexMember, 1);
-        updateCate(idCate, { listIdInvite: cateData.listIdInvite });
+        await updateCate(idCate, { listIdInvite: cateData.listIdInvite });
         return true;
     } else {
         return false;
     }
+}
+
+async function resetInvite(idCate) {
+    const cateData = await getInfoCate(idCate);
+    cateData.listIdInvite = [];
+    await updateCate(idCate, { listIdInvite: cateData.listIdInvite });
 }
 
 async function isOrgaCate(idCate, idMember) {
@@ -65,4 +71,15 @@ async function isMaxCate(idMember, maxCate) {
     return catesMember.length >= maxCate;
 }
 
-module.exports = { getInfoCate, createCate, deleteCate, updateCate, isAddInvite, isRemoveInvite, isOrgaCate, isPanelOrga, isMaxCate };
+module.exports = {
+    getInfoCate,
+    createCate,
+    deleteCate,
+    updateCate,
+    isAddInvite,
+    isRemoveInvite,
+    resetInvite,
+    isOrgaCate,
+    isPanelOrga,
+    isMaxCate,
+};
