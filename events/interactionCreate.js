@@ -17,8 +17,8 @@ module.exports = {
                 console.error(`Erreur d'exécution de la commande : ${interaction.commandName}`);
                 console.error(error);
             }
-        }
-        else if (interaction.isButton()) {
+
+        } else if (interaction.isButton()) {
             const { buttons } = interaction.client;
             const { customId } = interaction;
             const button = buttons.get(customId);
@@ -30,6 +30,19 @@ module.exports = {
                 console.error(`Erreur d'exécution du boutton : ${interaction.customId}`);
                 console.error(error);
             }
+        } else if (interaction.isModalSubmit()) {
+            const { modals } = interaction.client;
+            const { customId } = interaction;
+            const modal = modals.get(customId);
+            if (!modal) return new Error("There is no code for this modal.");
+
+            try {
+                await modal.execute(interaction);
+            } catch (error) {
+                console.error(`Erreur d'exécution du boutton : ${interaction.customId}`);
+                console.error(error);
+            }
+
         } else {
             console.log("Interaction inconnu !");
         }

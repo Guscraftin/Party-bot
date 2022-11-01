@@ -9,11 +9,12 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.commands = new Collection();
 client.buttons = new Collection();
+client.modals = new Collection();
 
 
 const commandsPath = path.join(__dirname, "commands");
-
 const commandFolders = fs.readdirSync(commandsPath);
+
 for (const commandFolder of commandFolders) {
     const commandsPath1 = path.join(commandsPath, commandFolder);
     const commandFiles = fs.readdirSync(commandsPath1).filter(
@@ -47,8 +48,8 @@ for (const file of eventFiles) {
 
 
 const buttonsPath = path.join(__dirname, "buttons");
-
 const buttonsFolders = fs.readdirSync(buttonsPath);
+
 for (const buttonsFolder of buttonsFolders) {
     const buttonsPath1 = path.join(buttonsPath, buttonsFolder);
     const buttonFiles = fs.readdirSync(buttonsPath1).filter(
@@ -62,6 +63,27 @@ for (const buttonsFolder of buttonsFolders) {
             client.buttons.set(button.data.name, button);
         } else {
             console.log(`[WARNING] The button at ${filePath} is missing a required "data" or "execute" property.`);
+        }
+    }
+}
+
+
+const modalsPath = path.join(__dirname, "modals");
+const modalsFolders = fs.readdirSync(modalsPath);
+
+for (const modalsFolder of modalsFolders) {
+    const modalsPath1 = path.join(modalsPath, modalsFolder);
+    const modalFiles = fs.readdirSync(modalsPath1).filter(
+        (file) => file.endsWith(".js"),
+    );
+
+    for (const file of modalFiles) {
+        const filePath = path.join(modalsPath1, file);
+        const modal = require(filePath);
+        if ("data" in modal && "execute" in modal) {
+            client.modals.set(modal.data.name, modal);
+        } else {
+            console.log(`[WARNING] The modal at ${filePath} is missing a required "data" or "execute" property.`);
         }
     }
 }
