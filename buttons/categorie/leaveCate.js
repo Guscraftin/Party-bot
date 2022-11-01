@@ -21,7 +21,10 @@ module.exports = {
                 }
             });
         } else {
-            return interaction.reply({ content: `<@${membre.id}> n'a pas pu être retiré de cette soirée !`, ephemeral: true });
+            return interaction.reply({
+                content: `<@${membre.id}> n'a pas pu être retiré de cette soirée !`,
+                ephemeral: true,
+            });
         }
     },
 };

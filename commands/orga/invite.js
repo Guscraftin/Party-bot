@@ -20,7 +20,13 @@ module.exports = {
         const membre = interaction.options.getMember("membre");
         const cateId = channel.parentId;
 
-        if (!await isOrgaCate(cateId, interaction.member.id)) return interaction.reply({ content: "Tu dois être l'organisateur de cette soirée (de cette catégorie) pour pouvoir gérer les invités !\nSi tu es organisateur et que tu veux gérer tes invités, tape cette commande dans la catégorie de ta soirée.", ephemeral: true });
+        if (!await isOrgaCate(cateId, interaction.member.id)) {
+            return interaction.reply({
+                content: "Tu dois être l'organisateur de cette soirée (de cette catégorie) pour pouvoir gérer les invités !" +
+                "\nSi tu es organisateur et que tu veux gérer tes invités, tape cette commande dans la catégorie de ta soirée.",
+                ephemeral: true,
+            });
+        }
 
         if (membre === interaction.member) return interaction.reply({ content: "Vous ne pouvez pas gérer votre invitation car vous êtes déjà l'organisateur de cette soirée !", ephemeral: true });
         if (membre.user.bot) return interaction.reply({ content: "Vous ne pouvez pas gérer l'invitation d'un bot discord à votre soirée !", ephemeral: true });

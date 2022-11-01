@@ -5,7 +5,15 @@ const { token, database_uri } = require("./config.json");
 // const { tokenTest, database_uri } = require("./config.json");
 const mongoose = require("mongoose");
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildInvites,
+        GatewayIntentBits.GuildPresences,
+        GatewayIntentBits.DirectMessages,
+    ],
+});
 
 client.commands = new Collection();
 client.buttons = new Collection();

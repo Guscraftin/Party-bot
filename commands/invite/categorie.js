@@ -47,14 +47,18 @@ module.exports = {
                     });
                 } else {
                     return interaction.reply({
-                        content: `Es-tu sûr de vouloir supprimer cette soirée ? (\`${interaction.channel.parent.name}\`)\n\nSi c'est une erreur, rejete ce message pour éviter de cliquer sur le bouton rouge de suppression.`,
+                        content: `Es-tu sûr de vouloir supprimer cette soirée ? (\`${interaction.channel.parent.name}\`)` +
+                        "\n\nSi c'est une erreur, rejete ce message pour éviter de cliquer sur le bouton rouge de suppression.",
                         ephemeral: true,
                         components: [new ActionRowBuilder().addComponents(deletedButton)],
                     });
                 }
 
             default:
-                return interaction.reply({ content: "Votre interaction a recontré des problèmes, contacter l'administrateur !", ephemeral: true });
+                return interaction.reply({
+                    content: "Votre interaction a recontré des problèmes, contacter l'administrateur !",
+                    ephemeral: true,
+                });
         };
     },
 };

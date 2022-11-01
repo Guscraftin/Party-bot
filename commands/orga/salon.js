@@ -34,7 +34,13 @@ module.exports = {
             .setLabel("Supprimer ce salon")
             .setStyle(ButtonStyle.Danger);
 
-        if (!await isOrgaCate(cateId, interaction.member.id)) return interaction.reply({ content: "Tu dois être l'organisateur de cette soirée (de cette catégorie) pour pouvoir gérer les salons !\nSi tu es organisateur et que tu veux gérer tes salons, tape cette commande dans la catégorie de ta soirée.", ephemeral: true });
+        if (!await isOrgaCate(cateId, interaction.member.id)) {
+            return interaction.reply({
+                content: "Tu dois être l'organisateur de cette soirée (de cette catégorie) pour pouvoir gérer les invités !" +
+                "\nSi tu es organisateur et que tu veux gérer tes invités, tape cette commande dans la catégorie de ta soirée.",
+                ephemeral: true,
+            });
+        }
 
         switch (interaction.options.getSubcommand()) {
             case "verrouiller":
