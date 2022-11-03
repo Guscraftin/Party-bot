@@ -9,5 +9,8 @@
     "adminCateIdTest": "1035203380697632810",
 
     "adminMessageId": "1030925121428406384",
-    "adminMessageIdTest": "1035203380697632811"
+    "adminMessageIdTest": "1035203380697632811",
+
+    "adminPseudoLogId" : "1037488216183427202",
+    "adminPseudoLogIdTest" : "1037488816556101722"
 }
