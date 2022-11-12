@@ -4,7 +4,7 @@ const { channelPanelId, channelPanelIdTest, guild, adminCateId, adminCateIdTest 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("panel")
-        .setDescription("Pour setup le panel !")
+        .setDescription("🚧〢Pour setup le panel !")
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .setDMPermission(false),
 

@@ -4,7 +4,7 @@ const { createCate, isAddInvite, isRemoveInvite, deleteCate } = require("../../u
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("db_test")
-        .setDescription("Pour tester les interactions avec la db !")
+        .setDescription("🚧〢Pour tester les interactions avec la db !")
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .setDMPermission(false)
         .addStringOption(option =>

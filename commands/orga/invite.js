@@ -8,11 +8,11 @@ module.exports = {
         .setDMPermission(false)
         .addSubcommand(subcommand =>
             subcommand.setName("ajouter")
-                .setDescription("Pour ajouter un membre à sa soirée (sa catégorie).")
+                .setDescription("🎉〢Pour ajouter un membre à sa soirée (sa catégorie).")
                 .addUserOption(option => option.setName("membre").setDescription("Le membre à ajouter").setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand.setName("retirer")
-                .setDescription("Pour retirer un membre à sa soirée (sa catégorie).")
+                .setDescription("🎉〢Pour retirer un membre à sa soirée (sa catégorie).")
                 .addUserOption(option => option.setName("membre").setDescription("Le membre à retirer").setRequired(true))),
 
     async execute(interaction) {

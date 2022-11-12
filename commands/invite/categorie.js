@@ -8,10 +8,10 @@ module.exports = {
         .setDMPermission(false)
         .addSubcommand(subcommand =>
             subcommand.setName("quitter")
-                .setDescription("Pour quitter cette soirée (cette catégorie)."))
+                .setDescription("👤〢Pour quitter cette soirée (cette catégorie)."))
         .addSubcommand(subcommand =>
             subcommand.setName("supprimer")
-                .setDescription("Pour supprimer cette soirée (sa catégorie).")),
+                .setDescription("🎉〢Pour supprimer cette soirée (sa catégorie).")),
 
     async execute(interaction) {
         const leaveButton = new ButtonBuilder()
