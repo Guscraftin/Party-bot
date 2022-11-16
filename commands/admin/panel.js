@@ -27,7 +27,11 @@ module.exports = {
         const embed = new EmbedBuilder()
             .setColor(0x0099FF)
             .setTitle("Bienvenue sur le panel de contrôle")
-            .setDescription("Explication rapide des choses essentiels car il y aura la doc");
+            .setDescription("> __Voici le panel principal qui vous permet de :__\n> \n" +
+            "> -> **🎉・Créer une soirée :** Une catégorie sera créer où vous pourrez organiser votre soirée ou votre événement;\n> \n" +
+            "> -> **✏️・Se renommer :** Vous permet de vous renommer sur le serveur notamment pour faciliter les invitations aux événements;\n> \n" +
+            "> -> **📰・Documentation :** Pour une explication détaillée des principales fonctionnalités disponibles sur ce serveur.\n\n" +
+            "*Ces fonctionnalités sont disponible en cliquant sur les boutons ci dessous.*");
 
         if (interaction.guild == guild) {
             if (interaction.channelId === channelPanelId || interaction.channel.parentId === adminCateId) {
