@@ -1,4 +1,4 @@
-const { isRemoveInvite, isPanelOrga } = require("../../utils/utilities");
+const { isPanelOrga } = require("../../utils/utilities");
 
 module.exports = {
     data: {
@@ -9,7 +9,7 @@ module.exports = {
         const cateId = channel.parentId;
         const membre = interaction.member;
 
-        if (await isRemoveInvite(cateId, membre.id)) {
+        try { // (await isRemoveInvite(cateId, membre.id)) // => Car parfois les gens ne sont détecté invités
             await channel.parent.permissionOverwrites.delete(membre, `Par la volonté de l'invité (${membre.id}) !`);
             await channel.parent.children.cache.each(function(channel1) {
                 channel1.permissionOverwrites.delete(membre);
@@ -20,7 +20,7 @@ module.exports = {
                     channel1.send(`<@${membre.id}> a quitté ta soirée !`);
                 }
             });
-        } else {
+        } catch (error) {
             return interaction.reply({
                 content: `<@${membre.id}> n'a pas pu être retiré de cette soirée !`,
                 ephemeral: true,
