@@ -12,6 +12,8 @@ module.exports = {
             "> -> Tu peux également verouiller ou déverouiller un salon pour que seul toi puisse parler ou non.\n\n" +
             "> **Pour les invités :**\n" +
             "> -> Tu peux quitter une catégorie à tout moment en taper dans un salon de la catégorie la commande : `/categorie quitter`\n\n" +
+            "> **Pour tout le monde :**\n" +
+            "> -> Tu peux te renommer à tout moment via le bouton ci dessous du moment que ton pseudo commence par ton prénom.\n\n" +
             "__PS :__ En cas de problème ou si tu as besoin d'aide, adresse toi à <@265785336175656970> en message privé.",
             ephemeral: true,
         });

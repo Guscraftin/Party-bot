@@ -45,7 +45,8 @@ module.exports = {
             await pseudoLogChannel.send({ embeds: [embed], components: [buttons] });
 
             await interaction.reply({
-                content: "Votre pseudo a bien été changé !",
+                content: "Votre pseudo a bien été changé !\n" +
+                "Attention, si vous ne vous êtes pas renommé avec un pseudo commençant par votre prénom, votre pseudo sera réinitialisé !",
                 ephemeral: true,
             });
 
@@ -92,7 +93,8 @@ module.exports = {
 
             await interaction.reply({
                 content: "Votre demande pour changer de speudo à bien été envoyé pour traitement.\n" +
-                "Vous recevrez le résultat de votre demande en MP (pensez à les autoriser).",
+                "Vous recevrez le résultat de votre demande en MP (pensez à les autoriser)." +
+                "*Sachant que toutes les demandes où le pseudo demandé ne commence pas par votre prénom se verront refusées.*",
                 ephemeral: true,
             });
         }

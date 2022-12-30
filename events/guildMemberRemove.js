@@ -1,5 +1,6 @@
 const { Events } = require("discord.js");
-const { guild, adminMessageId, adminMessageIdTest } = require("../constVar.json");
+const { isPanelOrga } = require("../utils/utilities");
+const { guild, adminMessageId, adminMessageIdTest, adminCateId, adminCateIdTest } = require("../constVar.json");
 
 module.exports = {
     name: Events.GuildMemberRemove,
@@ -13,5 +14,14 @@ module.exports = {
                 await channel.send(`<@${member.id}> a quitté le serveur !`);
             });
         }
+
+        await member.guild.channels.fetch().then(async function(channels) {
+            await channels.filter(channel => channel.parentId != null && channel.parentId != adminCateId && channel.parentId != adminCateIdTest).each(async function(channel) {
+                if (await isPanelOrga(channel.parentId, channel.id)) {
+                    await channel.send(`**<@${member.id}> a quitté le serveur !**\n` +
+                    "Par conséquent, il a également quitté ta soirée s'il été invité !");
+                }
+            });
+        });
     },
 };

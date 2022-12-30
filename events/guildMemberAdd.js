@@ -1,4 +1,6 @@
 const { Events } = require("discord.js");
+const { isPanelOrga } = require("../utils/utilities");
+const { adminCateId, adminCateIdTest } = require("../constVar");
 
 module.exports = {
     name: Events.GuildMemberAdd,
@@ -9,10 +11,19 @@ module.exports = {
             "> Sur celui-ci, tu pourras **organiser ta propre soirée ou ton propre événement** 🎉 !\n" +
             "> De plus, tu pourras facilement être invité aux soirées organisées sur le serveur.\n" +
             "> D'ailleurs, en rejoingnant ce serveur, tu diminues le risque d'être oublié dans la liste des invités à un événement.\n\n" +
-            "**N'oublie pas de te renommer** grâce au bouton sous le panel et **d'inviter tes amis** pour toi aussi organiser tes soirées sur ce serveur avec tout le monde 😉 !");
+            "**N'oublie pas de te renommer avec ton prénom** grâce au bouton sous le panel et **d'inviter tes amis** pour toi aussi organiser tes soirées sur ce serveur avec tout le monde 😉 !");
             // Ajouter en embed avec le lien vers le panel
         } catch (e) {
             console.error(e);
         }
+
+        await member.guild.channels.fetch().then(async function(channels) {
+            await channels.filter(channel => channel.parentId != null && channel.parentId != adminCateId && channel.parentId != adminCateIdTest).each(async function(channel) {
+                if (await isPanelOrga(channel.parentId, channel.id)) {
+                    await channel.send(`**<@${member.id}> a rejoint le serveur !**\n` +
+                    `Si tu souhaites l'inviter à ta soirée, tu peux désormais le faire avec la commande \`/invite ajouter @${member.user.tag}\` !`);
+                }
+            });
+        });
     },
 };

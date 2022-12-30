@@ -1,4 +1,4 @@
-const { isPanelOrga } = require("../../utils/utilities");
+const { isPanelOrga, isRemoveInvite } = require("../../utils/utilities");
 
 module.exports = {
     data: {
@@ -9,7 +9,8 @@ module.exports = {
         const cateId = channel.parentId;
         const membre = interaction.member;
 
-        try { // (await isRemoveInvite(cateId, membre.id)) // => Car parfois les gens ne sont détecté invités
+        try {
+            await isRemoveInvite(cateId, membre.id); // => Car parfois les gens ne sont détecté invités
             await channel.parent.permissionOverwrites.delete(membre, `Par la volonté de l'invité (${membre.id}) !`);
             await channel.parent.children.cache.each(function(channel1) {
                 channel1.permissionOverwrites.delete(membre);
@@ -17,7 +18,7 @@ module.exports = {
 
             await channel.parent.children.cache.each(async function(channel1) {
                 if (await isPanelOrga(cateId, channel1.id)) {
-                    channel1.send(`<@${membre.id}> a quitté ta soirée !`);
+                    channel1.send(`**<@${membre.id}> a quitté ta soirée !**`);
                 }
             });
         } catch (error) {
