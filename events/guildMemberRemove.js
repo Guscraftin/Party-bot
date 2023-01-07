@@ -1,6 +1,6 @@
 const { Events } = require("discord.js");
 const { isPanelOrga } = require("../utils/utilities");
-const { guild, adminMessageId, adminMessageIdTest, adminCateId, adminCateIdTest } = require("../constVar.json");
+const { guild, guildTest, adminMessageId, adminMessageIdTest, adminCateId, adminCateIdTest } = require("../constVar.json");
 
 module.exports = {
     name: Events.GuildMemberRemove,
@@ -9,10 +9,12 @@ module.exports = {
             await member.guild.channels.fetch(adminMessageId).then(async function(channel) {
                 await channel.send(`<@${member.id}> a quitté le serveur !`);
             });
-        } else {
+        } else if (member.guild.id == guildTest) {
             await member.guild.channels.fetch(adminMessageIdTest).then(async function(channel) {
                 await channel.send(`<@${member.id}> a quitté le serveur !`);
             });
+        } else {
+            return;
         }
 
         await member.guild.channels.fetch().then(async function(channels) {
