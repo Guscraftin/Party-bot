@@ -49,14 +49,14 @@ module.exports = {
                     return interaction.reply({ content: `<@${membre.id}> est déjà sur votre liste d'invités à votre soirée !`, ephemeral: true });
                 }
             case "retirer":
+                await channel.parent.permissionOverwrites.delete(membre, `Par la volonté de l'organisateur (${membre.id}) !`);
+                await channel.parent.children.cache.each(function(channel1) {
+                    channel1.permissionOverwrites.delete(membre);
+                });
                 if (await isRemoveInvite(cateId, membre.id)) {
-                    await channel.parent.permissionOverwrites.delete(membre, `Par la volonté de l'organisateur (${membre.id}) !`);
-                    await channel.parent.children.cache.each(function(channel1) {
-                        channel1.permissionOverwrites.delete(membre);
-                    });
                     return interaction.reply({ content: `<@${membre.id}> a bien été retiré de votre liste d'invités pour votre soirée !`, ephemeral: true });
                 } else {
-                    return interaction.reply({ content: `<@${membre.id}> n'est déjà pas invité à votre soirée !`, ephemeral: true });
+                    return interaction.reply({ content: `<@${membre.id}> a été retiré de votre soirée ou il n'est déjà pas invité à votre soirée !`, ephemeral: true });
                 }
         }
         return interaction.reply({ content: "Votre interaction a rencontré un problème !", ephemeral: true });
