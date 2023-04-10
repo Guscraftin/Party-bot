@@ -28,7 +28,7 @@ module.exports = {
                 await button.execute(interaction);
             } catch (error) {
                 console.error(`Erreur d'exécution du boutton : ${interaction.customId}`);
-                if (!error.includes("Unknown interaction")) {
+                if (!error.message.includes("Unknown interaction")) {
                     console.error(error);
                 }
             }
