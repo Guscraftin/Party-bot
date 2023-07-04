@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require("discord.js");
-const { createCate, isAddInvite, isRemoveInvite, deleteCate } = require("../../utils/utilities");
+const { createCate, isAddInvite, isRemoveInvite, deleteCate } = require("../../_utils/utilities");
 
 module.exports = {
     data: new SlashCommandBuilder()

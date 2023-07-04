@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
-const { isOrgaCate, isAddInvite, isRemoveInvite, isPanelOrga } = require("../../utils/utilities");
+const { isOrgaCate, isAddInvite, isRemoveInvite, isPanelOrga } = require("../../_utils/utilities");
 
 module.exports = {
     data: new SlashCommandBuilder()

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
-const { isOrgaCate } = require("../../utils/utilities");
+const { isOrgaCate } = require("../../_utils/utilities");
 
 module.exports = {
     data: new SlashCommandBuilder()

@@ -1,6 +1,6 @@
 const { Events } = require("discord.js");
-const { deleteCate } = require("../utils/utilities");
-const { channelPanelId, channelPanelIdTest } = require("../constVar");
+const { deleteCate } = require("../../_utils/utilities");
+const { channelPanelId, channelPanelIdTest } = require(process.env.CONST);
 
 module.exports = {
     name: Events.ChannelDelete,

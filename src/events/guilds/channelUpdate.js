@@ -1,6 +1,5 @@
 const { Events, PermissionsBitField } = require("discord.js");
-const { isPanelOrga, isOrgaCate, resetInvite, isAddInvite } = require("../utils/utilities");
-const { clientId, clientIdTest } = require("../config");
+const { isPanelOrga, isOrgaCate, resetInvite, isAddInvite } = require("../../_utils/utilities");
 
 module.exports = {
     name: Events.ChannelUpdate,
@@ -38,7 +37,7 @@ module.exports = {
             await resetInvite(cate.id);
             await cate.permissionOverwrites.cache.each(async function(perm) {
                 if (perm.type === 1) {
-                    if (!await isOrgaCate(cate.id, perm.id) && perm.id !== clientId && perm.id !== clientIdTest) {
+                    if (!await isOrgaCate(cate.id, perm.id) && perm.id !== process.env.CLIENT_id) {
                         if (await perm.allow.has(PermissionsBitField.Flags.ViewChannel)) {
                             await isAddInvite(cate.id, perm.id);
                         }

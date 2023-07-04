@@ -1,5 +1,5 @@
 const { ChannelType, PermissionFlagsBits } = require("discord.js");
-const { createCate, isMaxCate } = require("../../utils/utilities");
+const { createCate, isMaxCate } = require("../../_utils/utilities");
 
 module.exports = {
     data: {

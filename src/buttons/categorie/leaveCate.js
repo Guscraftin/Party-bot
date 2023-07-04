@@ -1,4 +1,4 @@
-const { isPanelOrga, isRemoveInvite } = require("../../utils/utilities");
+const { isPanelOrga, isRemoveInvite } = require("../../_utils/utilities");
 
 module.exports = {
     data: {

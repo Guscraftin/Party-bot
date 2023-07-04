@@ -1,6 +1,6 @@
 const { Events } = require("discord.js");
-const { isPanelOrga } = require("../utils/utilities");
-const { adminCateId, adminCateIdTest, guild, guildTest } = require("../constVar");
+const { isPanelOrga } = require("../../_utils/utilities");
+const { adminCateId, adminCateIdTest, guild, guildTest } = require(process.env.CONST);
 
 module.exports = {
     name: Events.GuildMemberAdd,

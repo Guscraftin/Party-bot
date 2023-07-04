@@ -1,9 +1,8 @@
+const dotenv = require('dotenv');
+dotenv.config();
+const { Client, Collection, GatewayIntentBits } = require("discord.js");
 const fs = require("node:fs");
 const path = require("node:path");
-const { Client, Collection, GatewayIntentBits } = require("discord.js");
-const { token, database_uri } = require("./config.json");
-// const { tokenTest, database_uri } = require("./config.json");
-const mongoose = require("mongoose");
 
 const client = new Client({
     intents: [
@@ -20,7 +19,7 @@ client.buttons = new Collection();
 client.modals = new Collection();
 
 
-const commandsPath = path.join(__dirname, "commands");
+const commandsPath = path.join(__dirname, "src/commands");
 const commandFolders = fs.readdirSync(commandsPath);
 
 for (const commandFolder of commandFolders) {
@@ -41,21 +40,28 @@ for (const commandFolder of commandFolders) {
 }
 
 
-const eventsPath = path.join(__dirname, "events");
-const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith(".js"));
+const eventsPath = path.join(__dirname, "src/events");
+const eventFolders = fs.readdirSync(eventsPath);
 
-for (const file of eventFiles) {
-    const filePath = path.join(eventsPath, file);
-    const event = require(filePath);
-    if (event.once) {
-        client.once(event.name, (...args) => event.execute(...args));
-    } else {
-        client.on(event.name, (...args) => event.execute(...args));
+for (const eventFolder of eventFolders) {
+    const eventPath = path.join(eventsPath, eventFolder);
+    const eventFiles = fs.readdirSync(eventPath).filter(
+        (file) => file.endsWith(".js"),
+    );
+
+    for (const file of eventFiles) {
+        const filePath = path.join(eventPath, file);
+        const event = require(filePath);
+        if (event.once) {
+            client.once(event.name, (...args) => event.execute(...args));
+        } else {
+            client.on(event.name, (...args) => event.execute(...args));
+        }
     }
 }
 
 
-const buttonsPath = path.join(__dirname, "buttons");
+const buttonsPath = path.join(__dirname, "src/buttons");
 const buttonsFolders = fs.readdirSync(buttonsPath);
 
 for (const buttonsFolder of buttonsFolders) {
@@ -76,7 +82,7 @@ for (const buttonsFolder of buttonsFolders) {
 }
 
 
-const modalsPath = path.join(__dirname, "modals");
+const modalsPath = path.join(__dirname, "src/modals");
 const modalsFolders = fs.readdirSync(modalsPath);
 
 for (const modalsFolder of modalsFolders) {
@@ -114,14 +120,4 @@ process.on("unhandledRejection", (reason, promise) => {
 process.on("warning", (...args) => console.log(...args));
 
 
-mongoose.connect(database_uri, {
-    autoIndex: false,
-    maxPoolSize: 10,
-    serverSelectionTimeoutMS: 5000,
-    socketTimeoutMS: 45000,
-    family: 4,
-}).then(() => console.log("Connected to database.")).catch(err => console.error(err));
-
-
-client.login(token);
-// client.login(tokenTest);
+client.login(process.env.TOKEN);

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require("discord.js");
-const { channelPanelId, channelPanelIdTest, guild, adminCateId, adminCateIdTest } = require("../../constVar");
+const { channelPanelId, channelPanelIdTest, guild, adminCateId, adminCateIdTest } = require(process.env.CONST);
 
 module.exports = {
     data: new SlashCommandBuilder()

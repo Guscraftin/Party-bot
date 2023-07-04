@@ -1,4 +1,4 @@
-const CateSoiree = require("./models");
+const CateSoiree = require("../models/party.js");
 
 async function getInfoCate(idCate) {
     const cateData = await CateSoiree.findOne({ idCate: idCate });
