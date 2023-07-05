@@ -1,4 +1,3 @@
-
 /**
  * Come from the button "Supprimer la soirée" in the file "src\buttons\salon\delete.js".
  * Delete a channel in a category (party) by the organizer.

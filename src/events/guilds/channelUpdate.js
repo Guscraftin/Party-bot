@@ -29,9 +29,9 @@ module.exports = {
             != listNewPerm.get(newChannel.guild.id).allow.has(PermissionFlagsBits.ViewChannel)) {
 
                 // Send a message to the organizer
-                const panelOrganizerChannel = await newChannel.guild.channels.fetch(party.panel_organizer_id); 
+                const panelOrganizerChannel = await newChannel.guild.channels.fetch(party.panel_organizer_id);
                 if (panelOrganizerChannel) {
-                    await channel.send("Attention, tu permet à tout le monde de voir ou de ne plus voir cette catégorie !\n" +
+                    await panelOrganizerChannel.send("Attention, tu permet à tout le monde de voir ou de ne plus voir cette catégorie !\n" +
                     "La fonctionnalité qui permet de répendre les permissions dans ta catégorie n'est pas implémenter." +
                     "Tu vas devoir vérifier toi même toutes les permissions dans tes salons.");
                 }
@@ -42,7 +42,7 @@ module.exports = {
              */
 
             // Update the database
-            let newGuestList = [];
+            const newGuestList = [];
             await listNewPerm.each(async function(perm) {
                 // If the permission is for a member
                 if (perm.type === 1) {
@@ -62,7 +62,7 @@ module.exports = {
             await category.children.cache.each(async function(channel) {
                 if (party.channel_without_organizer === channel.id) {
                     // Get the list og organizer
-                    let listOrganizer = [];
+                    const listOrganizer = [];
                     try {
                         listOrganizer.push(await newChannel.guild.members.fetch(party.organizer_id));
                         await party.organizer_list_id.forEach(async function(organizer) {
@@ -81,7 +81,7 @@ module.exports = {
                         });
                     });
 
-                } else if (!channel.permissionsLocked&& party.panel_organizer_id !== channel.id && party.channel_organizer_only !== channel.id) {
+                } else if (!channel.permissionsLocked && party.panel_organizer_id !== channel.id && party.channel_organizer_only !== channel.id) {
                     await channel.lockPermissions();
                     await channel.permissionOverwrites.edit(newChannel.guild.id, {
                         SendMessages: false,

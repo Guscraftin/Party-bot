@@ -18,10 +18,10 @@ module.exports = {
         const embed = new EmbedBuilder()
             .setAuthor({ name: interaction.message.embeds[0].author.name, iconURL: interaction.message.embeds[0].author.iconURL })
             .setColor("#26b500")
-            .setDescription(`**${membre} a changé son speudo !**\n`)
+            .setDescription(`**${member} a changé son speudo !**\n`)
             .addFields(
-                { name: "Ancien pseudo :", value: membre.user.username, inline: true },
-                { name: "Pseudo actuel :", value: membre.nickname, inline: true },
+                { name: "Ancien pseudo :", value: member.user.username, inline: true },
+                { name: "Pseudo actuel :", value: member.nickname, inline: true },
             )
             .setFooter({ text: interaction.message.embeds[0].footer.text });
 

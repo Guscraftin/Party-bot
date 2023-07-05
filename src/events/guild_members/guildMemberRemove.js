@@ -1,6 +1,6 @@
 const { Events } = require("discord.js");
 const { Party } = require("../../dbObjects");
-const { adminMessageId, adminCateId } = require(process.env.CONST);
+const { adminMessageId } = require(process.env.CONST);
 
 /**
  * If a member leave the server in the main server,
@@ -23,7 +23,7 @@ module.exports = {
         await allParty.each(async function(party) {
             // TODO: Send a message in admin message channel if the organizer of a party is not in the server
             // TODO: Remove organizer to the party if he is not in the server (organizer list and guest list in DB)
-            
+
             const panelOrganizerChannel = await member.guild.channels.fetch(party.panel_organizer_id);
             if (panelOrganizerChannel) {
                 await panelOrganizerChannel.send(`**${member} a quitté le serveur !**\n` +

@@ -90,7 +90,7 @@ module.exports = {
                     const confirmButton = new ButtonBuilder()
                         .setCustomId("confirmDelete")
                         .setLabel("Supprimer ce salon")
-                        .setStyle(ButtonStyle.Danger)
+                        .setStyle(ButtonStyle.Danger);
 
                     return interaction.reply({
                         content: `Es-tu sûr de vouloir supprimer ce salon ? (<#${channelId}>)\n\nSi c'est une erreur, rejete ce message pour éviter de cliquer sur le bouton rouge de suppression.`,

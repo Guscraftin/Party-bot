@@ -1,6 +1,5 @@
 const { Events } = require("discord.js");
 const { Party } = require("../../dbObjects");
-const { adminCateId } = require(process.env.CONST);
 
 /**
  * If a member join the server in the main server,

@@ -16,9 +16,9 @@ module.exports = {
         const member = await interaction.guild.members.fetch(membreId);
         if (!member) return interaction.reply({ content: "Le membre n'a pas été trouvé !", ephemeral: true });
 
-        const oldName = membre.nickname;
+        const oldName = member.nickname;
         await member.setNickname(newName, "Sur demande du membre après acceptation");
-        
+
         const embed = new EmbedBuilder()
             .setAuthor({ name: interaction.message.embeds[0].author.name, iconURL: interaction.message.embeds[0].author.iconURL })
             .setColor("#26b500")
@@ -28,7 +28,7 @@ module.exports = {
                 { name: "Pseudo souhaité :", value: newName, inline: true },
             )
             .setFooter({ text: interaction.message.embeds[0].footer.text });
-        
+
         const buttons = new ActionRowBuilder()
             .addComponents(
                 new ButtonBuilder()

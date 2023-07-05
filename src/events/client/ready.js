@@ -1,6 +1,6 @@
 const { Events } = require("discord.js");
 const { channelPanelId } = require(process.env.CONST);
-const { Party } = require('../../dbObjects');
+const { Party } = require("../../dbObjects");
 const cron = require("cron");
 
 module.exports = {

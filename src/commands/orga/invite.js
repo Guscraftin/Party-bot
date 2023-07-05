@@ -52,9 +52,9 @@ module.exports = {
                 await channel.parent.permissionOverwrites.create(member, {
                     ViewChannel: true,
                 });
-                await channel.parent.children.cache.each(async function(channel) {
-                    if (channel.id != party.panel_organizer_id && channel.id != party.channel_organizer_only) {
-                        await channel.permissionOverwrites.create(member, {
+                await channel.parent.children.cache.each(async function(channel1) {
+                    if (channel1.id != party.panel_organizer_id && channel1.id != party.channel_organizer_only) {
+                        await channel1.permissionOverwrites.create(member, {
                             ViewChannel: true,
                         });
                     }
