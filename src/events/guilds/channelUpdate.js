@@ -61,25 +61,26 @@ module.exports = {
             // Propagate category changes
             await category.children.cache.each(async function(channel) {
                 if (party.channel_without_organizer === channel.id) {
-                    // Get the list og organizer
-                    const listOrganizer = [];
-                    try {
-                        listOrganizer.push(await newChannel.guild.members.fetch(party.organizer_id));
-                        await party.organizer_list_id.forEach(async function(organizer) {
-                            const member = await newChannel.guild.members.fetch(organizer);
-                            if (member) listOrganizer.push(member);
-                        });
-                    } catch (error) {
-                        console.error("channelUpdate listOrganizer - " + error);
-                    }
+                    // TODO: Do it in the invite command + leave category
+                    // // Get the list og organizer
+                    // const listOrganizer = [];
+                    // try {
+                    //     listOrganizer.push(await newChannel.guild.members.fetch(party.organizer_id));
+                    //     await party.organizer_list_id.forEach(async function(organizer) {
+                    //         const member = await newChannel.guild.members.fetch(organizer);
+                    //         if (member) listOrganizer.push(member);
+                    //     });
+                    // } catch (error) {
+                    //     console.error("channelUpdate listOrganizer - " + error);
+                    // }
 
-                    // Update the permission of the channel without organizer
-                    await channel.lockPermissions();
-                    listOrganizer.forEach(async function(organizer) {
-                        await channel.permissionOverwrites.edit(organizer, {
-                            ViewChannel: false,
-                        });
-                    });
+                    // // Update the permission of the channel without organizer
+                    // await channel.lockPermissions();
+                    // listOrganizer.forEach(async function(organizer) {
+                    //     await channel.permissionOverwrites.edit(organizer, {
+                    //         ViewChannel: false,
+                    //     });
+                    // });
 
                 } else if (!channel.permissionsLocked && party.panel_organizer_id !== channel.id && party.channel_organizer_only !== channel.id) {
                     await channel.lockPermissions();

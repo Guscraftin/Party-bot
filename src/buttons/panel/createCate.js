@@ -67,7 +67,7 @@ module.exports = {
                 },
                 {
                     id: interaction.guild.id,
-			        deny: [PermissionFlagsBits.ViewChannel],
+                    deny: [PermissionFlagsBits.ViewChannel],
                 },
             ],
         }).then(categorie => categorie).catch(console.error);
@@ -86,7 +86,7 @@ module.exports = {
                 },
                 {
                     id: interaction.guild.id,
-			        deny: [
+                    deny: [
                         PermissionFlagsBits.ViewChannel,
                         PermissionFlagsBits.ManageChannels,
                         PermissionFlagsBits.ManageRoles,
@@ -111,17 +111,29 @@ module.exports = {
                 },
             ],
         });
+        const withoutOrgaChannel = await cate.children.create({
+            name: "sans-orga",
+            type: ChannelType.GuildText,
+            topic: "Ce salon permet aux personnes de discuter sans organisateur.",
+            permissionOverwrites: [
+                {
+                    id: interaction.guild.id,
+                    deny: [
+                        PermissionFlagsBits.ViewChannel,
+                    ],
+                }
+            ],
+        });
         const defaultChannel = await cate.children.create({
             name: "Discussion",
             type: ChannelType.GuildText,
         });
 
-        // TODO: Add channel without the organizer
-
         try {
             await Party.create({
                 category_id: cateId,
                 panel_organizer_id: panelOrganizer.id,
+                channel_without_organizer: withoutOrgaChannel.id,
                 organizer_id: interaction.member.id,
             });
         } catch (error) {

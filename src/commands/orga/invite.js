@@ -20,6 +20,12 @@ module.exports = {
         const member = interaction.options.getMember("membre");
         const cateId = channel.parentId;
 
+        // Check the exception of the member
+        if (!member) return interaction.reply({ content: "Ce membre n'est plus sur le serveur !", ephemeral: true });
+        if (member === interaction.member) return interaction.reply({ content: "Vous ne pouvez pas gérer votre invitation car vous êtes déjà l'organisateur de cette soirée !", ephemeral: true });
+        if (member.user.bot) return interaction.reply({ content: "Vous ne pouvez pas gérer l'invitation d'un bot discord à votre soirée !", ephemeral: true });
+
+
         // TODO: list of all organizer can use this command
         const party = await Party.findOne({ where: { category_id: cateId, organizer_id: interaction.member.id } });
         if (!party) {
@@ -30,9 +36,7 @@ module.exports = {
             });
         }
 
-        if (member === interaction.member) return interaction.reply({ content: "Vous ne pouvez pas gérer votre invitation car vous êtes déjà l'organisateur de cette soirée !", ephemeral: true });
-        if (member.user.bot) return interaction.reply({ content: "Vous ne pouvez pas gérer l'invitation d'un bot discord à votre soirée !", ephemeral: true });
-
+        let withoutOrgaChannel;
         switch (interaction.options.getSubcommand()) {
             /**
              * Add a member to the party as a guest
@@ -48,27 +52,24 @@ module.exports = {
                     console.error("invite add db - " + error);
                     return interaction.reply({ content: "Une erreur est survenue lors de l'ajout de l'invité à votre soirée !", ephemeral: true });
                 }
+                
+                withoutOrgaChannel = await interaction.guild.channels.fetch(await party.channel_without_organizer);
+                if (withoutOrgaChannel) await withoutOrgaChannel.permissionOverwrites.create(member, { ViewChannel: true });
+                
+                await channel.parent.permissionOverwrites.create(member, { ViewChannel: true });
 
-                await channel.parent.permissionOverwrites.create(member, {
-                    ViewChannel: true,
-                });
-                await channel.parent.children.cache.each(async function(channel1) {
-                    if (channel1.id != party.panel_organizer_id && channel1.id != party.channel_organizer_only) {
-                        await channel1.permissionOverwrites.create(member, {
-                            ViewChannel: true,
-                        });
-                    }
-                });
                 return interaction.reply({ content: `${member} a bien été ajouté sur votre liste d'invités pour votre soirée !`, ephemeral: true });
 
             /**
              * Remove a member from the party as a guest
              */
             case "retirer":
+                if (!party.guest_list_id.includes(member.id)) return interaction.reply({ content: `${member} n'est déjà pas sur votre liste d'invités à votre soirée !`, ephemeral: true });
+                
+                withoutOrgaChannel = await interaction.guild.channels.fetch(party.channel_without_organizer);
+                if (withoutOrgaChannel) await withoutOrgaChannel.permissionOverwrites.delete(member, `Par la volonté de l'organisateur (${member.id}) !`);
+
                 await channel.parent.permissionOverwrites.delete(member, `Par la volonté de l'organisateur (${member.id}) !`);
-                await channel.parent.children.cache.each(function(channel1) {
-                    channel1.permissionOverwrites.delete(member);
-                });
 
                 try {
                     const listGuest = party.guest_list_id;
