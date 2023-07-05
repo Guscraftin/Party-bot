@@ -26,11 +26,11 @@ module.exports = {
 
         // Send a message in all organizer channel
         const allParty = await Party.findAll();
-        await allParty.each(async function(party) {
+        await allParty.forEach(async function(party) {
             const panelOrganizerChannel = await member.guild.channels.fetch(party.panel_organizer_id);
             if (panelOrganizerChannel) {
                 await panelOrganizerChannel.send(`**${member} a rejoint le serveur !**\n` +
-                `Si tu souhaites l'inviter à ta soirée, tu peux désormais le faire avec la commande \`/invite ajouter @${member.user.displayName}\` !`);
+                `Si tu souhaites l'inviter à ta soirée, tu peux désormais le faire avec la commande \`/invite ajouter @${member.displayName}\` !`);
             }
         });
     },

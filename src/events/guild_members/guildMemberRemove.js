@@ -20,7 +20,7 @@ module.exports = {
 
         // Send a message in all organizer channel
         const allParty = await Party.findAll();
-        await allParty.each(async function(party) {
+        await allParty.forEach(async function(party) {
             // TODO: Send a message in admin message channel if the organizer of a party is not in the server
             // TODO: Remove organizer to the party if he is not in the server (organizer list and guest list in DB)
 

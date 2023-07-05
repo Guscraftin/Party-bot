@@ -17,12 +17,14 @@ module.exports = {
         // TODO: Remove also in list of organizer
         // Remove the user from the party database
         const party = await Party.findOne({ where: { category_id: cateId } });
-        const index = party.list_invite.indexOf(membre.id);
+        if (!party) return interaction.reply({ content: "Une erreur est survenue lors de la récupération de la soirée !", ephemeral: true });
+
+        const index = party.guest_list_id.indexOf(membre.id);
         if (index > -1) {
-            party.list_invite.splice(index, 1);
+            party.guest_list_id.splice(index, 1);
         }
         try {
-            await party.update({ list_invite: party.list_invite.join(",") });
+            await party.update({ guest_list_id: party.guest_list_id.join(",") });
         } catch (error) {
             console.error("leaveCate - " + error);
             return interaction.reply({ content: "Une erreur est survenue lors de la mise à jour de la base de données !", ephemeral: true });
@@ -33,7 +35,7 @@ module.exports = {
             channel1.permissionOverwrites.delete(membre);
         });
 
-        const panelOrga = interaction.guild.channels.fetch(await party.panel_organizer_id);
+        const panelOrga = await interaction.guild.channels.fetch(await party.panel_organizer_id);
         if (panelOrga) {
             panelOrga.send(`**<@${membre.id}> a quitté la soirée !**`);
         }

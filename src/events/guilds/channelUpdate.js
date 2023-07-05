@@ -47,7 +47,7 @@ module.exports = {
                 // If the permission is for a member
                 if (perm.type === 1) {
                     // Get the list of member who can see the category
-                    if (await perm.allow.has(PermissionFlagsBits.ViewChannel) && perm.id !== process.env.CLIENT_id) {
+                    if (await perm.allow.has(PermissionFlagsBits.ViewChannel) && perm.id !== process.env.CLIENT_id && perm.id !== party.organizer_id) {
                         newGuestList.push(perm.id);
                     }
                 }

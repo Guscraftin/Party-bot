@@ -14,7 +14,7 @@ module.exports = {
         await Party.sync({ alter: true });
 
         // Set a message when the bot is ready
-        console.log(`Ready! Logged in as ${client.user.displayName}`);
+        console.log(`Ready! Logged in as ${client.user.username}`);
 
 
         /**

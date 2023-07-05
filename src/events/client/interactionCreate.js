@@ -46,7 +46,7 @@ module.exports = {
             }
 
         } else {
-            console.log("Interaction inconnu !");
+            console.error("interactionCreate - Interaction inconnu !");
         }
     },
 };

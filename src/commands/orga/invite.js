@@ -38,7 +38,7 @@ module.exports = {
              * Add a member to the party as a guest
              */
             case "ajouter":
-                if (party.includes(member.id)) return interaction.reply({ content: `${member} est déjà sur votre liste d'invités à votre soirée !`, ephemeral: true });
+                if (party.guest_list_id.includes(member.id)) return interaction.reply({ content: `${member} est déjà sur votre liste d'invités à votre soirée !`, ephemeral: true });
 
                 try {
                     const listGuest = party.guest_list_id;
