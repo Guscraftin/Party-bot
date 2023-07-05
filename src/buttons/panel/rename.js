@@ -1,5 +1,10 @@
 const { ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } = require("discord.js");
 
+/**
+ * Come from the button "Renommer" in the file "src\buttons\panel\panel.js".
+ * Show the modal to rename the user.
+ */
+
 module.exports = {
     data: {
         name: "rename",

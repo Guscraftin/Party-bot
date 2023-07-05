@@ -1,9 +1,15 @@
+/**
+ * Come from the button "Documentation" in the file "src\buttons\panel\panel.js".
+ * Show the documentation of the bot.
+ */
+
 module.exports = {
     data: {
         name: "documentation",
     },
     async execute(interaction) {
-        // Voici le bouton pour avoir un embed avec un select menu (orga, invite, conctact via DM)
+        // TODO: Voici le bouton pour avoir un embed avec un select menu (orga, invite, conctact via DM)
+        // TODO: Add some documentation on the good way to manage a party
 
         return interaction.reply({
             content: "Sur ce serveur, **tu peux organiser** facilement **une soirée** ou **un événement** en créant une catégorie avec le bouton vert ci dessus.\n\n" +

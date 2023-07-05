@@ -4,12 +4,27 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             primaryKey: true,
         },
+        panel_organizer_id: {
+            type: DataTypes.STRING,
+            defaultValue: 0,
+            allowNull: false,
+        },
+        channel_organizer_only: {
+            type: DataTypes.STRING,
+            defaultValue: '',
+            allowNull: false,
+        },
+        channel_without_organizer: {
+            type: DataTypes.STRING,
+            defaultValue: '',
+            allowNull: false,
+        },
         organizer_id: {
             type: DataTypes.STRING,
             defaultValue: '',
             allowNull: false,
         },
-        list_organizer_id: {
+        organizer_list_id: {
             type: DataTypes.TEXT,
             defaultValue: '[]',
             allowNull: false,
@@ -21,11 +36,6 @@ module.exports = (sequelize, DataTypes) => {
                 const data = value ? JSON.stringify(value) : '[]';
                 this.setDataValue('list_organizer_id', data);
             },
-        },
-        panel_id: {
-            type: DataTypes.STRING,
-            defaultValue: 0,
-            allowNull: false,
         },
         guest_list_id: {
             type: DataTypes.TEXT,

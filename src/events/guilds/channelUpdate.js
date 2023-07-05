@@ -1,55 +1,89 @@
-const { Events, PermissionsBitField } = require("discord.js");
-const { isPanelOrga, isOrgaCate, resetInvite, isAddInvite } = require("../../_utils/utilities");
+const { Events, PermissionFlagsBits } = require("discord.js");
+const { Party } = require("../../dbObjects");
+
+/**
+ * If the permission in the category has changed in the main server,
+ * Update the guest_list and update the channel in the category
+ */
 
 module.exports = {
     name: Events.ChannelUpdate,
     async execute(oldChannel, newChannel) {
-        // Exit for update DM
+        // Return it is a DM or a group DM
         if (newChannel.type === 1 || newChannel.type === 3) return;
+        if (newChannel.guild.id !== process.env.GUILD_ID) return;
 
-        let cate;
+        const category = newChannel;
+        const listOldPerm = oldChannel.permissionOverwrites.cache;
+        const listNewPerm = newChannel.permissionOverwrites.cache;
+
+        // Type 4: category
         if (newChannel.type === 4) {
-            cate = newChannel;
-        } else if (newChannel.parent != null) {
-            cate = newChannel.parent;
-        }
+            const party = await Party.findOne({ where: { category_id: category.id } });
+            if (!party) return;
 
-        const listPermOld = oldChannel.permissionOverwrites.cache;
-        const listPermNew = newChannel.permissionOverwrites.cache;
+            /*
+             * If the permission everyone to see the category has changed
+             */
+            if (listOldPerm.get(newChannel.guild.id).allow.has(PermissionFlagsBits.ViewChannel)
+            != listNewPerm.get(newChannel.guild.id).allow.has(PermissionFlagsBits.ViewChannel)) {
 
-        // Modif perm caté
-        if (newChannel.type === 4) { // Ajouter si modif les perms d'un salon ?
-            // Si perms voir à everyone est changé
-            if (listPermOld.get(newChannel.guild.id).allow.has(PermissionsBitField.Flags.ViewChannel)
-            != listPermNew.get(newChannel.guild.id).allow.has(PermissionsBitField.Flags.ViewChannel)) {
-                cate.children.cache.each(async function(channel) {
-                    if (await isPanelOrga(cate.id, channel.id)) {
-                        await channel.send("Attention, tu permet à tout le monde de voir ou de ne plus voir cette catégorie !\n" +
-                        "La fonctionnalité qui permet de répendre les permissions dans ta catégorie n'est pas implémenter." +
-                        "Tu vas devoir vérifier toi même toutes les permissions dans tes salons.");
-                    }
-                });
+                // Send a message to the organizer
+                const panelOrganizerChannel = await newChannel.guild.channels.fetch(party.panel_organizer_id); 
+                if (panelOrganizerChannel) {
+                    await channel.send("Attention, tu permet à tout le monde de voir ou de ne plus voir cette catégorie !\n" +
+                    "La fonctionnalité qui permet de répendre les permissions dans ta catégorie n'est pas implémenter." +
+                    "Tu vas devoir vérifier toi même toutes les permissions dans tes salons.");
+                }
             }
 
-            // Si ajoute ou retire un membre à la caté ou salon (propager -> salon lock + actu db)
+            /*
+             * If the permission for new or old member to see the category has changed
+             */
 
-            // Actu db
-            await resetInvite(cate.id);
-            await cate.permissionOverwrites.cache.each(async function(perm) {
+            // Update the database
+            let newGuestList = [];
+            await listNewPerm.each(async function(perm) {
+                // If the permission is for a member
                 if (perm.type === 1) {
-                    if (!await isOrgaCate(cate.id, perm.id) && perm.id !== process.env.CLIENT_id) {
-                        if (await perm.allow.has(PermissionsBitField.Flags.ViewChannel)) {
-                            await isAddInvite(cate.id, perm.id);
-                        }
+                    // Get the list of member who can see the category
+                    if (await perm.allow.has(PermissionFlagsBits.ViewChannel) && perm.id !== process.env.CLIENT_id) {
+                        newGuestList.push(perm.id);
                     }
                 }
             });
+            try {
+                await party.update({ guest_list_id: newGuestList });
+            } catch (error) {
+                console.error("channelUpdate guestList - " + error);
+            }
 
-            // Propage change (pour les salons lock, on les resyncro avec la cate et on les relock)
-            await cate.children.cache.each(async function(channel1) {
-                if (!channel1.permissionsLocked && !await isPanelOrga(cate.id, channel1.id)) {
-                    await channel1.lockPermissions();
-                    await channel1.permissionOverwrites.edit(newChannel.guild.id, {
+            // Propagate category changes
+            await category.children.cache.each(async function(channel) {
+                if (party.channel_without_organizer === channel.id) {
+                    // Get the list og organizer
+                    let listOrganizer = [];
+                    try {
+                        listOrganizer.push(await newChannel.guild.members.fetch(party.organizer_id));
+                        await party.organizer_list_id.forEach(async function(organizer) {
+                            const member = await newChannel.guild.members.fetch(organizer);
+                            if (member) listOrganizer.push(member);
+                        });
+                    } catch (error) {
+                        console.error("channelUpdate listOrganizer - " + error);
+                    }
+
+                    // Update the permission of the channel without organizer
+                    await channel.lockPermissions();
+                    listOrganizer.forEach(async function(organizer) {
+                        await channel.permissionOverwrites.edit(organizer, {
+                            ViewChannel: false,
+                        });
+                    });
+
+                } else if (!channel.permissionsLocked&& party.panel_organizer_id !== channel.id && party.channel_organizer_only !== channel.id) {
+                    await channel.lockPermissions();
+                    await channel.permissionOverwrites.edit(newChannel.guild.id, {
                         SendMessages: false,
                     });
                 }

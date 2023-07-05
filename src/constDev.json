@@ -3,5 +3,7 @@
 
     "adminCateId": "1035203380697632810",
     "adminMessageId": "1035203380697632811",
-    "adminPseudoLogId" : "1037488816556101722"
+    "adminPseudoLogId" : "1037488816556101722",
+    
+    "maxParty": 3
 }

@@ -1,26 +1,29 @@
 const { ChannelType, PermissionFlagsBits } = require("discord.js");
-const { createCate, isMaxCate } = require("../../_utils/utilities");
+const { Party } = require("../../dbObjects");
+const { maxParty } = require(process.env.CONST);
+
+/**
+ * Come from the button "Créer une soirée" in the file "src\buttons\panel\panel.js".
+ * Create a new category (party) for the user.
+ */
 
 module.exports = {
     data: {
         name: "createCate",
     },
     async execute(interaction) {
-        const maxCate = 3;
-
-        if (await isMaxCate(interaction.member.id, maxCate)) {
+        const partyCount = await Party.count({ where: { organizer_id: interaction.member.id } });
+        if (partyCount && partyCount >= maxParty) {
             return interaction.reply({
-                content: `Tu ne peux plus créer de nouvelles soirées (catégorie) car tu as déjà \`${maxCate}\` catégories.`,
+                content: `Tu ne peux plus créer de nouvelles soirées (catégorie) car tu as déjà \`${maxParty}\` catégories.`,
                 ephemeral: true,
             });
         }
 
-        let nameCate = "nobody";
-        if (interaction.member.nickname != null) nameCate = interaction.member.nickname;
-        else if (interaction.member.user.username) nameCate = interaction.member.user.username;
+        await interaction.deferReply({ ephemeral: true });
 
         const cate = await interaction.guild.channels.create({
-            name: `Soirée de ${nameCate}`,
+            name: `Soirée de ${interaction.member.displayName}`,
             type: ChannelType.GuildCategory,
             position: 0,
             permissionOverwrites: [
@@ -47,10 +50,13 @@ module.exports = {
                         PermissionFlagsBits.ReadMessageHistory,
                         PermissionFlagsBits.SendTTSMessages,
                         PermissionFlagsBits.UseApplicationCommands,
+                        PermissionFlagsBits.SendVoiceMessages,
                         PermissionFlagsBits.Connect,
                         PermissionFlagsBits.Speak,
                         PermissionFlagsBits.Stream,
                         PermissionFlagsBits.UseEmbeddedActivities,
+                        PermissionFlagsBits.UseSoundboard,
+                        PermissionFlagsBits.UseExternalSounds,
                         PermissionFlagsBits.UseVAD,
                         PermissionFlagsBits.PrioritySpeaker,
                         PermissionFlagsBits.MuteMembers,
@@ -67,7 +73,7 @@ module.exports = {
         }).then(categorie => categorie).catch(console.error);
 
         const cateId = cate.id;
-        const privatePanel = await cate.children.create({
+        const panelOrganizer = await cate.children.create({
             name: "Panel orga",
             type: ChannelType.GuildText,
             topic: "Ce salon permet au bot de communiquer avec toi concernant cette soirée. *Notamment si des personnes la quitte.*",
@@ -100,6 +106,7 @@ module.exports = {
                         PermissionFlagsBits.ManageThreads,
                         PermissionFlagsBits.SendTTSMessages,
                         PermissionFlagsBits.UseApplicationCommands,
+                        PermissionFlagsBits.SendVoiceMessages,
                     ],
                 },
             ],
@@ -109,10 +116,20 @@ module.exports = {
             type: ChannelType.GuildText,
         });
 
-        createCate(cateId, interaction.member.id, privatePanel.id);
+        // TODO: Add channel without the organizer
 
-        return interaction.reply({
-            content: `J'ai bien créer ta catégorie pour accueillir ta soirée avec ce salon : <#${defaultChannel.id}> !`,
+        try {
+            await Party.create({
+                category_id: cateId,
+                panel_organizer_id: panelOrganizer.id,
+                organizer_id: interaction.member.id,
+            });
+        } catch (error) {
+            console.error("createCate - " + error);
+        }
+
+        return interaction.editReply({
+            content: `J'ai bien créer ta catégorie pour accueillir ta soirée avec ce salon : ${defaultChannel} !`,
             ephemeral: true,
         });
     },

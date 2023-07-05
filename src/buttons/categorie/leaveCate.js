@@ -1,4 +1,9 @@
-const { isPanelOrga, isRemoveInvite } = require("../../_utils/utilities");
+const { Party } = require("../../dbObjects");
+
+/**
+ * Come from the command "categorie quitter" in the file "src\command\invite\categorie.js".
+ * Leave the category (party) for the user.
+ */
 
 module.exports = {
     data: {
@@ -9,23 +14,28 @@ module.exports = {
         const cateId = channel.parentId;
         const membre = interaction.member;
 
+        // TODO: Remove also in list of organizer
+        // Remove the user from the party database
+        const party = await Party.findOne({ where: { category_id: cateId } });
+        const index = party.list_invite.indexOf(membre.id);
+        if (index > -1) {
+            party.list_invite.splice(index, 1);
+        }
         try {
-            await isRemoveInvite(cateId, membre.id); // => Car parfois les gens ne sont détecté invités
-            await channel.parent.permissionOverwrites.delete(membre, `Par la volonté de l'invité (${membre.id}) !`);
-            await channel.parent.children.cache.each(function(channel1) {
-                channel1.permissionOverwrites.delete(membre);
-            });
-
-            await channel.parent.children.cache.each(async function(channel1) {
-                if (await isPanelOrga(cateId, channel1.id)) {
-                    channel1.send(`**<@${membre.id}> a quitté ta soirée !**`);
-                }
-            });
+            await party.update({ list_invite: party.list_invite.join(",") });
         } catch (error) {
-            return interaction.reply({
-                content: `<@${membre.id}> n'a pas pu être retiré de cette soirée !`,
-                ephemeral: true,
-            });
+            console.error("leaveCate - " + error);
+            return interaction.reply({ content: "Une erreur est survenue lors de la mise à jour de la base de données !", ephemeral: true });
+        }
+
+        await channel.parent.permissionOverwrites.delete(membre, `Par la volonté de l'invité (${membre.id}) !`);
+        await channel.parent.children.cache.each(function(channel1) {
+            channel1.permissionOverwrites.delete(membre);
+        });
+
+        const panelOrga = interaction.guild.channels.fetch(await party.panel_organizer_id);
+        if (panelOrga) {
+            panelOrga.send(`**<@${membre.id}> a quitté la soirée !**`);
         }
     },
 };

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionsBitField, ChannelType, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
-const { isOrgaCate } = require("../../_utils/utilities");
+const { Party } = require("../../dbObjects");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -14,7 +14,7 @@ module.exports = {
                 .setDescription("🎉〢Pour permettre à tes invités de pourvoir parler dans ce salon."))
         .addSubcommand(subcommand =>
             subcommand.setName("créer")
-                .setDescription("🎉〢Pour créer un salon."))
+                .setDescription("🎉〢Pour créer un nouveau salon."))
         .addSubcommand(subcommand =>
             subcommand.setName("supprimer")
                 .setDescription("🎉〢Pour supprimer un salon.")),
@@ -22,19 +22,12 @@ module.exports = {
     async execute(interaction) {
         const channelId = interaction.channelId;
         const channel = interaction.channel;
-        const cate = channel.parent;
         const cateId = channel.parentId;
+        const cate = channel.parent;
 
-        // Create channel
-        let newChannel;
-
-        // Delete channel
-        const confirmButton = new ButtonBuilder()
-            .setCustomId("confirmDelete")
-            .setLabel("Supprimer ce salon")
-            .setStyle(ButtonStyle.Danger);
-
-        if (!await isOrgaCate(cateId, interaction.member.id)) {
+        // TODO: list of all organizer can use this command
+        const party = await Party.findOne({ where: { category_id: cateId, organizer_id: interaction.member.id } });
+        if (!party) {
             return interaction.reply({
                 content: "Tu dois être l'organisateur de cette soirée (de cette catégorie) pour pouvoir gérer les invités !" +
                 "\nSi tu es organisateur et que tu veux gérer tes invités, tape cette commande dans la catégorie de ta soirée.",
@@ -79,7 +72,7 @@ module.exports = {
 
             case "créer":
                 try {
-                    newChannel = await cate.children.create({
+                    const newChannel = await cate.children.create({
                         name: "nouveau",
                         type: ChannelType.GuildText,
                     });
@@ -94,6 +87,11 @@ module.exports = {
 
             case "supprimer":
                 try {
+                    const confirmButton = new ButtonBuilder()
+                        .setCustomId("confirmDelete")
+                        .setLabel("Supprimer ce salon")
+                        .setStyle(ButtonStyle.Danger)
+
                     return interaction.reply({
                         content: `Es-tu sûr de vouloir supprimer ce salon ? (<#${channelId}>)\n\nSi c'est une erreur, rejete ce message pour éviter de cliquer sur le bouton rouge de suppression.`,
                         ephemeral: true,

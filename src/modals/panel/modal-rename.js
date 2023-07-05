@@ -13,7 +13,7 @@ module.exports = {
          */
         if (interaction.member.nickname === null) {
             const embed = new EmbedBuilder()
-                .setAuthor({ name: interaction.member.user.tag, iconURL: interaction.member.user.displayAvatarURL() })
+                .setAuthor({ name: interaction.member.user.displayName, iconURL: interaction.member.user.displayAvatarURL() })
                 .setColor("#5193f8")
                 .setDescription(`**${interaction.member} a changé son speudo !**\n`)
                 .addFields(
@@ -63,7 +63,7 @@ module.exports = {
          */
         } else {
             const embed = new EmbedBuilder()
-                .setAuthor({ name: interaction.member.user.tag, iconURL: interaction.member.user.displayAvatarURL() })
+                .setAuthor({ name: interaction.member.user.displayName, iconURL: interaction.member.user.displayAvatarURL() })
                 .setColor("#5193f8")
                 .setDescription(`**${interaction.member} veut changer son speudo !**\n`)
                 .addFields(

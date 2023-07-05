@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require("discord.js");
-const { channelPanelId, channelPanelIdTest, guild, adminCateId, adminCateIdTest } = require(process.env.CONST);
+const { channelPanelId, adminCateId } = require(process.env.CONST);
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -33,42 +33,22 @@ module.exports = {
             "> -> **📰・Documentation :** Pour une explication détaillée des principales fonctionnalités disponibles sur ce serveur.\n\n" +
             "*Ces fonctionnalités sont disponible en cliquant sur les boutons ci dessous.*");
 
-        if (interaction.guild == guild) {
-            if (interaction.channelId === channelPanelId || interaction.channel.parentId === adminCateId) {
-                interaction.channel.send({
-                    embeds: [embed],
-                    components: [new ActionRowBuilder().addComponents(createButton, renameButton, docButton)],
-                });
+        if (interaction.channelId === channelPanelId || interaction.channel.parentId === adminCateId) {
+            await interaction.channel.send({
+                embeds: [embed],
+                components: [new ActionRowBuilder().addComponents(createButton, renameButton, docButton)],
+            });
 
-                return interaction.reply({
-                    content: "Le panel a bien été déployé ci desous !",
-                    ephemeral: true,
-                });
+            return interaction.reply({
+                content: "Le panel a bien été déployé ci desous !",
+                ephemeral: true,
+            });
 
-            } else {
-                return interaction.reply({
-                    content: "Tu ne peux pas déployer le panel dans ce salon !",
-                    ephemeral: true,
-                });
-            }
         } else {
-            if (interaction.channelId === channelPanelIdTest || interaction.channel.parentId === adminCateIdTest) {
-                interaction.channel.send({
-                    embeds: [embed],
-                    components: [new ActionRowBuilder().addComponents(createButton, renameButton, docButton)],
-                });
-
-                return interaction.reply({
-                    content: "Le panel a bien été déployé ci desous !",
-                    ephemeral: true,
-                });
-
-            } else {
-                return interaction.reply({
-                    content: "Tu ne peux pas déployer le panel dans ce salon !",
-                    ephemeral: true,
-                });
-            }
+            return interaction.reply({
+                content: "Tu ne peux pas déployer le panel dans ce salon !",
+                ephemeral: true,
+            });
         }
     },
 };

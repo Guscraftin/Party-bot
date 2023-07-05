@@ -1,5 +1,7 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require("discord.js");
-const { createCate, isAddInvite, isRemoveInvite, deleteCate } = require("../../_utils/utilities");
+/* const { createCate, isAddInvite, isRemoveInvite, deleteCate } = require(); */
+
+// TODO: Update the command to /admindb witch can manage the line in the db (not test if it's work)
 
 module.exports = {
     data: new SlashCommandBuilder()

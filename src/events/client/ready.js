@@ -14,13 +14,13 @@ module.exports = {
         await Party.sync({ alter: true });
 
         // Set a message when the bot is ready
-        console.log(`Ready! Logged in as ${client.user.tag}`);
+        console.log(`Ready! Logged in as ${client.user.displayName}`);
 
 
         /**
          * Cron job for the MP invite
          */
-        const MPInvite = new cron.CronJob("00,15,30,45 * * * * *", async function() {
+        const MPInvite = new cron.CronJob("00 00 21 1,7,14,20,26 * *", async function() {
             const blacklistMP = ["376493881854001152"];
             // Honorin
 
@@ -36,17 +36,17 @@ module.exports = {
                                 try {
                                     if (await guildParty.members.fetch().then(membre => !membre.has(member.id) && !member.user.bot) && blacklistMP.find(userId => userId === member.id) === undefined) {
                                         try {
-                                            member.send(`👋 Salut ${member.user.username} !\n\n` +
+                                            member.send(`👋 Salut ${member.username} !\n\n` +
                                             `> Je viens te voir car __tu n'es toujours pas__ sur le serveur discord **\`${guildParty.name}\`**.\n` +
                                             "> Ce serveur **regroupe tous les événements organisés par les personnes présentes sur les même serveurs que toi** !\n" +
                                             `> Vient donc les rejoindre grâce à cette invitation ${inviteURL} afin que toi aussi tu puisses organiser tes soirées et être invité 🎉 !`);
-                                            console.log(`Envoie d'une invite à ${member.user.tag}`);
+                                            console.log(`Envoie d'une invite à ${member.displayName}`);
                                         } catch (error) {
-                                            console.log(`Impossible d'envoyer une invitation à ${member.user.tag}`);
+                                            console.log(`Impossible d'envoyer une invitation à ${member.displayName}`);
                                         }
                                     }
                                 } catch (error) {
-                                    console.log(`Impossible de vérifier si ${member.user.tag} est sur le serveur`);
+                                    console.log(`Impossible de vérifier si ${member.displayName} est sur le serveur`);
                                 }
                             });
                         });
