@@ -10,20 +10,18 @@ module.exports = {
         name: "valider-rename",
     },
     async execute(interaction) {
-        const membreId = interaction.message.embeds[0].footer.text.slice(12);
+        const oldEmbed = interaction.message.embeds[0];
+        const membreId = oldEmbed.footer.text.slice(12);
 
         const member = await interaction.guild.members.fetch(membreId);
         if (!member) return interaction.reply({ content: "Le membre n'a pas été trouvé !", ephemeral: true });
 
         const embed = new EmbedBuilder()
-            .setAuthor({ name: interaction.message.embeds[0].author.name, iconURL: interaction.message.embeds[0].author.iconURL })
+            .setAuthor(oldEmbed.author)
             .setColor("#26b500")
-            .setDescription(`**${member} a changé son speudo !**\n`)
-            .addFields(
-                { name: "Ancien pseudo :", value: member.user.username, inline: true },
-                { name: "Pseudo actuel :", value: member.nickname, inline: true },
-            )
-            .setFooter({ text: interaction.message.embeds[0].footer.text });
+            .setDescription(oldEmbed.description)
+            .addFields(oldEmbed.fields)
+            .setFooter(oldEmbed.footer);
 
         await interaction.message.edit({ embeds: [embed], components: [] });
 

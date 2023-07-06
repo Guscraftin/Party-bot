@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const { Collection, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { adminPseudoLogId } = require(process.env.CONST);
 
 module.exports = {
@@ -13,11 +13,11 @@ module.exports = {
          */
         if (interaction.member.nickname === null) {
             const embed = new EmbedBuilder()
-                .setAuthor({ name: interaction.member.user.displayName, iconURL: interaction.member.user.displayAvatarURL() })
+                .setAuthor({ name: interaction.member.user.username, iconURL: interaction.member.user.displayAvatarURL() })
                 .setColor("#5193f8")
                 .setDescription(`**${interaction.member} a changé son speudo !**\n`)
                 .addFields(
-                    { name: "Ancien pseudo :", value: interaction.member.user.username, inline: true },
+                    { name: "Ancien pseudo :", value: interaction.member.displayName, inline: true },
                     { name: "Pseudo actuel :", value: newName, inline: true },
                 )
                 .setFooter({ text: `Id membre : ${interaction.member.user.id}` });
@@ -38,7 +38,7 @@ module.exports = {
                 );
 
             const pseudoLogChannel = await interaction.guild.channels.fetch(adminPseudoLogId);
-            if (!pseudoLogChannel) return interaction.reply({ content: "Votre demande n'a pas pu être correctement envoyée.", ephemeral: true });
+            if (!pseudoLogChannel || pseudoLogChannel instanceof Collection) return interaction.reply({ content: "Votre demande n'a pas pu être correctement envoyée.", ephemeral: true });
 
             await interaction.member.setNickname(newName, "Sur demande du membre");
             await pseudoLogChannel.send({ embeds: [embed], components: [buttons] });
@@ -63,7 +63,7 @@ module.exports = {
          */
         } else {
             const embed = new EmbedBuilder()
-                .setAuthor({ name: interaction.member.user.displayName, iconURL: interaction.member.user.displayAvatarURL() })
+                .setAuthor({ name: interaction.member.user.username, iconURL: interaction.member.user.displayAvatarURL() })
                 .setColor("#5193f8")
                 .setDescription(`**${interaction.member} veut changer son speudo !**\n`)
                 .addFields(
@@ -88,7 +88,7 @@ module.exports = {
                 );
 
             const pseudoLogChannel = await interaction.guild.channels.fetch(adminPseudoLogId);
-            if (!pseudoLogChannel) return interaction.reply({ content: "Votre demande n'a pas pu être correctement envoyée.", ephemeral: true });
+            if (!pseudoLogChannel || pseudoLogChannel instanceof Collection) return interaction.reply({ content: "Votre demande n'a pas pu être correctement envoyée.", ephemeral: true });
 
             await pseudoLogChannel.send({ embeds: [embed], components: [buttons] });
 

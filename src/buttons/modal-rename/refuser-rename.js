@@ -10,21 +10,19 @@ module.exports = {
         name: "refuser-rename",
     },
     async execute(interaction) {
-        const newName = interaction.message.embeds[0].fields[1].value;
-        const membreId = interaction.message.embeds[0].footer.text.slice(12);
+        const oldEmbed = interaction.message.embeds[0];
+        const membreId = oldEmbed.footer.text.slice(12);
 
         const member = await interaction.guild.members.fetch(membreId);
         if (!member) return interaction.reply({ content: "Le membre n'a pas été trouvé !", ephemeral: true });
 
+        const newName = oldEmbed.fields[1].value;
         const embed = new EmbedBuilder()
-            .setAuthor({ name: member.user.displayName, iconURL: member.user.displayAvatarURL() })
+            .setAuthor(oldEmbed.author)
             .setColor("#b50000")
-            .setDescription(`**${member} veut changer son speudo !**\n`)
-            .addFields(
-                { name: "Pseudo actuel :", value: member.nickname, inline: true },
-                { name: "Pseudo souhaité :", value: newName, inline: true },
-            )
-            .setFooter({ text: `Id membre : ${member.user.id}` });
+            .setDescription(oldEmbed.description)
+            .addFields(oldEmbed.fields)
+            .setFooter(oldEmbed.footer);
 
         const buttons = new ActionRowBuilder()
             .addComponents(
@@ -46,7 +44,7 @@ module.exports = {
         await member.send("A la suite de votre demande pour changer votre pseudo, celle-ci a été __refusé__.\n" +
             "En effet, **votre pseudo doit commencer par votre `Prénom`**.\n" +
             `De ce fait, il reste \`${member.nickname}\` et ne change pas en \`${newName}\` !\n\n` +
-            "*PS : Pour toute réclamation ou pour en comprendre les raisons, répondez à ce message afin que je vous mette en contacte avec le responsable !*",
+            "*PS : Pour toute réclamation ou pour en comprendre les raisons, envoyez un message à <@265785336175656970> !*",
         );
 
         await interaction.reply({

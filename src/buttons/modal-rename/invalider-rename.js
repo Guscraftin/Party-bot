@@ -10,22 +10,20 @@ module.exports = {
         name: "invalider-rename",
     },
     async execute(interaction) {
-        const membreId = interaction.message.embeds[0].footer.text.slice(12);
+        const oldEmbed = interaction.message.embeds[0];
+        const membreId = oldEmbed.footer.text.slice(12);
 
         const member = await interaction.guild.members.fetch(membreId);
         if (!member) return interaction.reply({ content: "Le membre n'a pas été trouvé !", ephemeral: true });
 
-        const oldName = member.user.username;
-        const newName = member.nickname;
+        const oldName = oldEmbed.fields[0].value;
+        const newName = oldEmbed.fields[1].value;
         const embed = new EmbedBuilder()
-            .setAuthor({ name: member.user.displayName, iconURL: member.user.displayAvatarURL() })
+            .setAuthor(oldEmbed.author)
             .setColor("#b50000")
-            .setDescription(`**${member} a changé son speudo !**\n`)
-            .addFields(
-                { name: "Ancien pseudo :", value: oldName, inline: true },
-                { name: "Pseudo actuel :", value: newName, inline: true },
-            )
-            .setFooter({ text: `Id membre : ${member.user.id}` });
+            .setDescription(oldEmbed.description)
+            .addFields(oldEmbed.fields)
+            .setFooter(oldEmbed.footer);
 
         await interaction.message.edit({ embeds: [embed], components: [] });
 
@@ -33,7 +31,7 @@ module.exports = {
         await member.send("A la suite de votre changement de pseudo, celle-ci a été annulé.\n" +
             `En effet, votre pseudo revient à \`${oldName}\` et ne reste pas en \`${newName}\` !\n` +
             "**Veuillez mettre votre `Prénom` au début de votre speudo.**\n\n" +
-            "*PS : Pour toute réclamation ou pour en comprendre les raisons, répondez à ce message afin que je vous mette en contacte avec le responsable !*",
+            "*PS : Pour toute réclamation ou pour en comprendre les raisons, envoyez un message à <@265785336175656970> !*",
         );
 
         await interaction.reply({

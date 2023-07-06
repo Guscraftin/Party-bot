@@ -10,24 +10,22 @@ module.exports = {
         name: "accepter-rename",
     },
     async execute(interaction) {
-        const newName = interaction.message.embeds[0].fields[1].value;
-        const membreId = interaction.message.embeds[0].footer.text.slice(12);
-
+        const oldEmbed = interaction.message.embeds[0];
+        const membreId = oldEmbed.footer.text.slice(12);
+        
         const member = await interaction.guild.members.fetch(membreId);
         if (!member) return interaction.reply({ content: "Le membre n'a pas été trouvé !", ephemeral: true });
-
-        const oldName = member.nickname;
+        
+        const oldName = oldEmbed.fields[0].value;
+        const newName = oldEmbed.fields[1].value;
         await member.setNickname(newName, "Sur demande du membre après acceptation");
 
         const embed = new EmbedBuilder()
-            .setAuthor({ name: interaction.message.embeds[0].author.name, iconURL: interaction.message.embeds[0].author.iconURL })
+            .setAuthor(oldEmbed.author)
             .setColor("#26b500")
-            .setDescription(`**${member} veut changer son speudo !**\n`)
-            .addFields(
-                { name: "Pseudo actuel :", value: oldName, inline: true },
-                { name: "Pseudo souhaité :", value: newName, inline: true },
-            )
-            .setFooter({ text: interaction.message.embeds[0].footer.text });
+            .setDescription(oldEmbed.description)
+            .addFields(oldEmbed.fields)
+            .setFooter(oldEmbed.footer);
 
         const buttons = new ActionRowBuilder()
             .addComponents(
