@@ -1,4 +1,4 @@
-const { Collection, SlashCommandBuilder } = require("discord.js");
+const { Collection, PermissionFlagsBits, SlashCommandBuilder } = require("discord.js");
 const { Party } = require("../../dbObjects");
 
 module.exports = {
@@ -25,8 +25,8 @@ module.exports = {
         if (member === interaction.member) return interaction.reply({ content: "Vous êtes déjà l'organisateur de cette soirée !", ephemeral: true });
         if (member.user.bot) return interaction.reply({ content: "Vous ne pouvez pas mettre un bot discord en tant qu'organisateur de votre soirée !", ephemeral: true });
 
-        const party = await Party.findOne({ where: { category_id: cateId, organizer_id: interaction.member.id } });
-        if (!party) {
+        const party = await Party.findOne({ where: { category_id: cateId } });
+        if (!party || (party.organizer_id !== interaction.member.id && !interaction.member.permissions.has(PermissionFlagsBits.Administrator))) {
             return interaction.reply({
                 content: "Tu dois être l'organisateur de cette soirée (de cette catégorie) pour pouvoir gérer les organisateurs !" +
                 "\nSi tu es organisateur et que tu veux gérer tes organisateurs, tape cette commande dans la catégorie de ta soirée.",

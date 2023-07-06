@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionsBitField, ChannelType, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, PermissionFlagsBits, SlashCommandBuilder } = require("discord.js");
 const { Party } = require("../../dbObjects");
 
 module.exports = {
@@ -26,7 +26,7 @@ module.exports = {
         const cate = channel.parent;
 
         const party = await Party.findOne({ where: { category_id: cateId } });
-        if (!party || !party.organizer_list_id.includes(interaction.member.id) || !party.organizer_id === interaction.member.id) {
+        if (!party || (party.organizer_id !== interaction.member.id && !interaction.member.permissions.has(PermissionFlagsBits.Administrator) && !party.organizer_list_id.includes(interaction.member.id))) {
             return interaction.reply({
                 content: "Tu dois être l'organisateur de cette soirée (de cette catégorie) pour pouvoir gérer les invités !" +
                 "\nSi tu es organisateur et que tu veux gérer tes invités, tape cette commande dans la catégorie de ta soirée.",
@@ -38,7 +38,7 @@ module.exports = {
             case "verrouiller":
                 try {
                     const bitPermissions = channel.permissionOverwrites.cache.get(interaction.guild.id).deny;
-                    if (bitPermissions.has(PermissionsBitField.Flags.SendMessages)) {
+                    if (bitPermissions.has(PermissionFlagsBits.SendMessages)) {
                         return interaction.reply({ content: "Vos invités ne peuvent déjà plus écrire dans ce salon !", ephemeral: true });
                     } else {
                         channel.permissionOverwrites.edit(interaction.guild.id, {
@@ -66,7 +66,7 @@ module.exports = {
             case "déverrouiller":
                 try {
                     const bitPermissions = channel.permissionOverwrites.cache.get(interaction.guild.id).deny;
-                    if (!bitPermissions.has(PermissionsBitField.Flags.SendMessages)) {
+                    if (!bitPermissions.has(PermissionFlagsBits.SendMessages)) {
                         return interaction.reply({ content: "Vos invités peuvent déjà écrire dans ce salon !", ephemeral: true });
                     } else {
                         try {
