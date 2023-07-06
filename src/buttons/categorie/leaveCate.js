@@ -24,8 +24,8 @@ module.exports = {
         // Remove the user from the organizer list
         if (party.organizer_list_id.includes(member.id)) {
             const organizersOnlyChannel = await interaction.guild.channels.fetch(party.channel_organizer_only);
-            if (organizersOnlyChannel && !(organizersOnlyChannel instanceof Collection)) await organizersOnlyChannel.permissionOverwrites.delete(member, `Par la volonté du membre (${member.id}) !`); 
-            
+            if (organizersOnlyChannel && !(organizersOnlyChannel instanceof Collection)) await organizersOnlyChannel.permissionOverwrites.delete(member, `Par la volonté du membre (${member.id}) !`);
+
             try {
                 const listOrganizer = party.organizer_list_id;
                 const index = listOrganizer.indexOf(member.id);

@@ -12,10 +12,10 @@ module.exports = {
     async execute(interaction) {
         const oldEmbed = interaction.message.embeds[0];
         const membreId = oldEmbed.footer.text.slice(12);
-        
+
         const member = await interaction.guild.members.fetch(membreId);
         if (!member) return interaction.reply({ content: "Le membre n'a pas été trouvé !", ephemeral: true });
-        
+
         const oldName = oldEmbed.fields[0].value;
         const newName = oldEmbed.fields[1].value;
         await member.setNickname(newName, "Sur demande du membre après acceptation");

@@ -23,8 +23,8 @@ module.exports = {
         await allParty.forEach(async function(party) {
             // If the member is the organizer of the party, delete the party
             if (party.organizer_id === member.id) return party.destroy();
-            
-            let isOaganizer = false;
+
+            const isOaganizer = false;
             // If the member is a organizer of the party, remove him from the organizer list
             if (party.organizer_list_id.includes(member.id)) {
                 try {
@@ -39,7 +39,7 @@ module.exports = {
                 }
             }
 
-            let isGuest = false;
+            const isGuest = false;
             // If the member is a guest of the party, remove him from the guest list
             if (party.guest_list_id.includes(member.id)) {
                 try {
@@ -57,8 +57,8 @@ module.exports = {
             // Send a message in main organizer channel
             const panelOrganizerChannel = await member.guild.channels.fetch(party.panel_organizer_id);
             if (panelOrganizerChannel && !(panelOrganizerChannel instanceof Collection)) {
-                await panelOrganizerChannel.send(`**${member} a quitté le serveur !**\n`+
-                `${isOaganizer ? `Il était un des organisateurs de ta soirée.` : (isGuest ? "Il était sur ta liste d'invité à ta soirée." : "") }`);
+                await panelOrganizerChannel.send(`**${member} a quitté le serveur !**\n` +
+                `${isOaganizer ? "Il était un des organisateurs de ta soirée." : (isGuest ? "Il était sur ta liste d'invité à ta soirée." : "") }`);
             }
         });
     },

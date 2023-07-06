@@ -57,7 +57,7 @@ module.exports = {
                         panel_organizer_id: panelOrga.id,
                         channel_organizer_only: orgaOnly.id,
                         channel_without_organizer: sansOrga.id,
-                        organizer_id: member.id
+                        organizer_id: member.id,
                     });
                     return interaction.reply({ content: "La soirée a bien été ajouté à la base de donnée !", ephemeral: true });
                 } catch (error) {

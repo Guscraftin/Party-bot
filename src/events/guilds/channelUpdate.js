@@ -59,7 +59,7 @@ module.exports = {
             }
 
             // Propagate category changes
-            await category.children.cache.each(async function(channel) {
+            await category.children.cache.each(async function() {
                 // if (party.channel_without_organizer === channel.id) {
                 //     // TODO: Can add/remove user as guest direct in permission of the category
                 //     // TODO: Update the permission of the channel without give access to organizer even a few seconds

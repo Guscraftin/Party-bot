@@ -17,9 +17,9 @@ module.exports = {
             const panelButton = new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()
-                        .setLabel('Lien vers le panel')
+                        .setLabel("Lien vers le panel")
                         .setURL(`https://discord.com/channels/${process.env.GUILD_ID}/${channelPanelId}`)
-                        .setStyle(ButtonStyle.Link)
+                        .setStyle(ButtonStyle.Link),
                 );
 
             await member.send({ content: `👋 Bonjour ${member.user.username}, je suis \`Party Bot\`, le bot qui gère le serveur **${member.guild.name}**.\n` +
