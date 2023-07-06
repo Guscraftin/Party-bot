@@ -21,13 +21,44 @@ module.exports = {
         // Send a message in all organizer channel
         const allParty = await Party.findAll();
         await allParty.forEach(async function(party) {
-            // TODO: Send a message in admin message channel if the organizer of a party is not in the server
-            // TODO: Remove organizer to the party if he is not in the server (organizer list and guest list in DB)
+            // If the member is the organizer of the party, delete the party
+            if (party.organizer_id === member.id) return party.destroy();
+            
+            let isOaganizer = false;
+            // If the member is a organizer of the party, remove him from the organizer list
+            if (party.organizer_list_id.includes(member.id)) {
+                try {
+                    const listOrganizer = party.organizer_list_id;
+                    const index = listOrganizer.indexOf(member.id);
+                    if (index > -1) {
+                        listOrganizer.splice(index, 1);
+                        await party.update({ organizer_list_id: listOrganizer });
+                    }
+                } catch (error) {
+                    console.log("guildMemberRemove orga - " + error);
+                }
+            }
 
+            let isGuest = false;
+            // If the member is a guest of the party, remove him from the guest list
+            if (party.guest_list_id.includes(member.id)) {
+                try {
+                    const listGuest = party.guest_list_id;
+                    const index = listGuest.indexOf(member.id);
+                    if (index > -1) {
+                        listGuest.splice(index, 1);
+                        await party.update({ guest_list_id: listGuest });
+                    }
+                } catch (error) {
+                    console.error("guildMemberRemove guest - " + error);
+                }
+            }
+
+            // Send a message in main organizer channel
             const panelOrganizerChannel = await member.guild.channels.fetch(party.panel_organizer_id);
             if (panelOrganizerChannel && !(panelOrganizerChannel instanceof Collection)) {
-                await panelOrganizerChannel.send(`**${member} a quitté le serveur !**\n` +
-                "Par conséquent, il a également quitté ta soirée s'il été invité !");
+                await panelOrganizerChannel.send(`**${member} a quitté le serveur !**\n`+
+                `${isOaganizer ? `Il était un des organisateurs de ta soirée.` : (isGuest ? "Il était sur ta liste d'invité à ta soirée." : "") }`);
             }
         });
     },
