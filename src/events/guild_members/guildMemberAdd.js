@@ -1,5 +1,6 @@
-const { Collection, Events } = require("discord.js");
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, Collection, Events } = require("discord.js");
 const { Party } = require("../../dbObjects");
+const { channelPanelId } = require(process.env.CONST);
 
 /**
  * If a member join the server in the main server,
@@ -13,13 +14,20 @@ module.exports = {
 
         // Send a welcome message to the new member
         try {
-            await member.send(`👋 Bonjour ${member.user.username}, je suis \`Party Bot\`, le bot qui gère le serveur **${member.guild.name}**.\n` +
+            const panelButton = new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setLabel('Lien vers le panel')
+                        .setURL(`https://discord.com/channels/${process.env.GUILD_ID}/${channelPanelId}`)
+                        .setStyle(ButtonStyle.Link)
+                );
+
+            await member.send({ content: `👋 Bonjour ${member.user.username}, je suis \`Party Bot\`, le bot qui gère le serveur **${member.guild.name}**.\n` +
             "Je te contacte pour me présenter et pour te remercier d'avoir rejoint ce serveur.\n\n" +
             "> Sur celui-ci, tu pourras **organiser ta propre soirée ou ton propre événement** 🎉 !\n" +
             "> De plus, tu pourras facilement être invité aux soirées organisées sur le serveur.\n" +
             "> D'ailleurs, en rejoingnant ce serveur, tu diminues le risque d'être oublié dans la liste des invités à un événement.\n\n" +
-            "**N'oublie pas de te renommer avec ton prénom** grâce au bouton sous le panel et **d'inviter tes amis** pour toi aussi organiser tes soirées sur ce serveur avec tout le monde 😉 !");
-            // TODO: Ajouter en embed avec un bouton vers le lien du panel
+            "**N'oublie pas de te renommer avec ton prénom** grâce au bouton sous le panel et **d'inviter tes amis** pour toi aussi organiser tes soirées sur ce serveur avec tout le monde 😉 !", components: [panelButton] });
         } catch (error) {
             console.error("guildMemberAdd - " + error);
         }
