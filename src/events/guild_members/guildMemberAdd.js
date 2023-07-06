@@ -1,4 +1,4 @@
-const { Events } = require("discord.js");
+const { Collection, Events } = require("discord.js");
 const { Party } = require("../../dbObjects");
 
 /**
@@ -28,7 +28,7 @@ module.exports = {
         const allParty = await Party.findAll();
         await allParty.forEach(async function(party) {
             const panelOrganizerChannel = await member.guild.channels.fetch(party.panel_organizer_id);
-            if (panelOrganizerChannel) {
+            if (panelOrganizerChannel && !(panelOrganizerChannel instanceof Collection)) {
                 await panelOrganizerChannel.send(`**${member} a rejoint le serveur !**\n` +
                 `Si tu souhaites l'inviter à ta soirée, tu peux désormais le faire avec la commande \`/invite ajouter @${member.displayName}\` !`);
             }

@@ -19,6 +19,19 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: "",
             allowNull: false,
         },
+        channels_locked_id: {
+            type: DataTypes.TEXT,
+            defaultValue: "[]",
+            allowNull: false,
+            get() {
+                const data = this.getDataValue("channels_locked_id");
+                return data ? JSON.parse(data) : [];
+            },
+            set(value) {
+                const data = value ? JSON.stringify(value) : "[]";
+                this.setDataValue("channels_locked_id", data);
+            },
+        },
         organizer_id: {
             type: DataTypes.STRING,
             defaultValue: "",
@@ -29,12 +42,12 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: "[]",
             allowNull: false,
             get() {
-                const data = this.getDataValue("list_organizer_id");
+                const data = this.getDataValue("organizer_list_id");
                 return data ? JSON.parse(data) : [];
             },
             set(value) {
                 const data = value ? JSON.stringify(value) : "[]";
-                this.setDataValue("list_organizer_id", data);
+                this.setDataValue("organizer_list_id", data);
             },
         },
         guest_list_id: {

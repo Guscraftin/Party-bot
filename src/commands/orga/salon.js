@@ -25,9 +25,8 @@ module.exports = {
         const cateId = channel.parentId;
         const cate = channel.parent;
 
-        // TODO: list of all organizer can use this command
-        const party = await Party.findOne({ where: { category_id: cateId, organizer_id: interaction.member.id } });
-        if (!party) {
+        const party = await Party.findOne({ where: { category_id: cateId } });
+        if (!party || !party.organizer_list_id.includes(interaction.member.id) || !party.organizer_id === interaction.member.id) {
             return interaction.reply({
                 content: "Tu dois être l'organisateur de cette soirée (de cette catégorie) pour pouvoir gérer les invités !" +
                 "\nSi tu es organisateur et que tu veux gérer tes invités, tape cette commande dans la catégorie de ta soirée.",
@@ -45,6 +44,16 @@ module.exports = {
                         channel.permissionOverwrites.edit(interaction.guild.id, {
                             SendMessages: false,
                         });
+
+                        try {
+                            const listLockedChannel = party.channels_locked_id;
+                            listLockedChannel.push(channelId);
+                            await party.update({ channels_locked_id: listLockedChannel });
+                        } catch (error) {
+                            console.error("salon verrouiller - " + error);
+                            return interaction.reply({ content: `Erreur lors de l'ajout du salon <#${channelId}> dans la liste des salons verouillés !`, ephemeral: true });
+                        }
+
                         return interaction.reply({ content: "Vos invités ne peuvent désormais plus écrire dans ce salon !", ephemeral: true });
                     }
 
@@ -60,7 +69,19 @@ module.exports = {
                     if (!bitPermissions.has(PermissionsBitField.Flags.SendMessages)) {
                         return interaction.reply({ content: "Vos invités peuvent déjà écrire dans ce salon !", ephemeral: true });
                     } else {
-                        channel.lockPermissions().catch(console.error);
+                        try {
+                            const listLockedChannel = party.channels_locked_id;
+                            const index = listLockedChannel.indexOf(channelId);
+                            if (index > -1) {
+                                listLockedChannel.splice(index, 1);
+                                await party.update({ channels_locked_id: listLockedChannel });
+                            }
+                        } catch (error) {
+                            console.error("salon déverrouiller - " + error);
+                            return interaction.reply({ content: `Erreur lors de la suppression du salon <#${channelId}> dans la liste des salons verouillés !`, ephemeral: true });
+                        }
+
+                        await channel.lockPermissions().catch(console.error);
                         return interaction.reply({ content: "Vos invités peuvent désormais écrire dans ce salon !", ephemeral: true });
                     }
 

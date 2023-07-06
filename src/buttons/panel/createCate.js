@@ -74,7 +74,7 @@ module.exports = {
 
         const cateId = cate.id;
         const panelOrganizer = await cate.children.create({
-            name: "Panel orga",
+            name: "orga-panel",
             type: ChannelType.GuildText,
             topic: "Ce salon permet au bot de communiquer avec toi concernant cette soirée. *Notamment si des personnes la quitte.*",
             permissionOverwrites: [
@@ -111,6 +111,28 @@ module.exports = {
                 },
             ],
         });
+        const channel_organizer_only = await cate.children.create({
+            name: "orga-only",
+            type: ChannelType.GuildText,
+            topic: "Ce salon offre aux organisateurs un espace privé réservé exclusivement à eux.",
+            permissionOverwrites: [
+                {
+                    id: interaction.member,
+                    allow: [
+                        PermissionFlagsBits.ViewChannel,
+                    ],
+                },
+                {
+                    id: interaction.guild.id,
+                    deny: [
+                        PermissionFlagsBits.ViewChannel,
+                        PermissionFlagsBits.ManageChannels,
+                        PermissionFlagsBits.ManageRoles,
+                        PermissionFlagsBits.CreateInstantInvite,
+                    ],
+                },
+            ],
+        });
         const withoutOrgaChannel = await cate.children.create({
             name: "sans-orga",
             type: ChannelType.GuildText,
@@ -121,7 +143,7 @@ module.exports = {
                     deny: [
                         PermissionFlagsBits.ViewChannel,
                     ],
-                }
+                },
             ],
         });
         const defaultChannel = await cate.children.create({
@@ -133,6 +155,7 @@ module.exports = {
             await Party.create({
                 category_id: cateId,
                 panel_organizer_id: panelOrganizer.id,
+                channel_organizer_only: channel_organizer_only.id,
                 channel_without_organizer: withoutOrgaChannel.id,
                 organizer_id: interaction.member.id,
             });

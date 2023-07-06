@@ -1,4 +1,4 @@
-const { Events } = require("discord.js");
+const { Collection, Events } = require("discord.js");
 const { Party } = require("../../dbObjects");
 const { adminMessageId } = require(process.env.CONST);
 
@@ -14,7 +14,7 @@ module.exports = {
 
         // Send a message in the admin channel
         const adminChannel = await member.guild.channels.fetch(adminMessageId);
-        if (adminChannel) {
+        if (adminChannel && !(adminChannel instanceof Collection)) {
             await adminChannel.send(`${member} a quitté le serveur !`);
         }
 
@@ -25,7 +25,7 @@ module.exports = {
             // TODO: Remove organizer to the party if he is not in the server (organizer list and guest list in DB)
 
             const panelOrganizerChannel = await member.guild.channels.fetch(party.panel_organizer_id);
-            if (panelOrganizerChannel) {
+            if (panelOrganizerChannel && !(panelOrganizerChannel instanceof Collection)) {
                 await panelOrganizerChannel.send(`**${member} a quitté le serveur !**\n` +
                 "Par conséquent, il a également quitté ta soirée s'il été invité !");
             }
