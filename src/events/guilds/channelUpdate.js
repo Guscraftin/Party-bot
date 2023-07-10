@@ -1,5 +1,6 @@
 const { Collection, Events, PermissionFlagsBits } = require("discord.js");
 const { Party } = require("../../dbObjects");
+const { syncParty } = require("../../functions");
 
 /**
  * If the permission in the category has changed in the main server,
@@ -37,63 +38,22 @@ module.exports = {
                 }
             }
 
-            /*
-             * If the permission for new or old member to see the category has changed
+
+            /**
+             * Sync the category with the database
              */
+            let isOrganizerInCategory = true;
+            if (listNewPerm.get(await party.organizer_id) === undefined || !listNewPerm.get(await party.organizer_id).allow.has(PermissionFlagsBits.ViewChannel)) isOrganizerInCategory = false;
 
-            // Update the database
-            const newGuestList = [];
-            await listNewPerm.each(async function(perm) {
-                // If the permission is for a member
-                if (perm.type === 1) {
-                    // Get the list of member who can see the category
-                    if (await perm.allow.has(PermissionFlagsBits.ViewChannel) && perm.id !== process.env.CLIENT_id && perm.id !== party.organizer_id) {
-                        newGuestList.push(perm.id);
-                    }
+            if (isOrganizerInCategory) syncParty(newChannel.guild, category.id);
+            else {
+                // Send a message to the organizer
+                const panelOrganizerChannel = await newChannel.guild.channels.fetch(party.panel_organizer_id);
+                if (panelOrganizerChannel && !(panelOrganizerChannel instanceof Collection)) {
+                    await panelOrganizerChannel.send("||@everyone||\n**Attention, tu viens de te priver de la permission de voir et de gérer ta soirée !**\n"+
+                    "Envoie un Message Privé à <@265785336175656970> pour régler ce problème.\n");
                 }
-            });
-            try {
-                await party.update({ guest_list_id: newGuestList });
-            } catch (error) {
-                console.error("channelUpdate guestList - " + error);
             }
-
-            // Propagate category changes
-            await category.children.cache.each(async function() {
-                // if (party.channel_without_organizer === channel.id) {
-                //     // TODO: Can add/remove user as guest direct in permission of the category
-                //     // TODO: Update the permission of the channel without give access to organizer even a few seconds
-                //     // TODO: Do it in the invite command + leave category
-                //     // Get the list og organizer
-                //     const listOrganizer = [];
-                //     try {
-                //         listOrganizer.push(await newChannel.guild.members.fetch(party.organizer_id));
-                //         await party.organizer_list_id.forEach(async function(organizer) {
-                //             const member = await newChannel.guild.members.fetch(organizer);
-                //             if (member) listOrganizer.push(member);
-                //         });
-                //     } catch (error) {
-                //         console.error("channelUpdate listOrganizer - " + error);
-                //     }
-
-                //     // Update the permission of the channel without organizer
-                //     await channel.lockPermissions();
-                //     listOrganizer.forEach(async function(organizer) {
-                //         await channel.permissionOverwrites.edit(organizer, {
-                //             ViewChannel: false,
-                //         });
-                //     });
-
-                await party.channels_locked_id.forEach(async channelLock => {
-                    const channel = await newChannel.guild.channels.fetch(channelLock);
-                    if (channel && !(channel instanceof Collection)) {
-                        await channel.lockPermissions();
-                        await channel.permissionOverwrites.edit(newChannel.guild.id, {
-                            SendMessages: false,
-                        });
-                    }
-                });
-            });
         }
     },
 };
