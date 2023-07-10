@@ -47,7 +47,7 @@ module.exports = {
             /**
              * Add a new party to the database
              */
-            case "add":
+            case "add": {
                 const partyExist = await Party.findOne({ where: { category_id: category.id } });
                 if (partyExist) return interaction.reply({ content: "Cette soirée existe déjà dans la base de donnée !", ephemeral: true });
 
@@ -64,6 +64,7 @@ module.exports = {
                     console.error("admindb add - " + error);
                     return interaction.reply({ content: "Une erreur est survenue lors de l'ajout de la soirée dans la base de donnée !", ephemeral: true });
                 }
+            }
 
 
             /**
@@ -76,7 +77,7 @@ module.exports = {
             /**
              * Remove a party in the database
              */
-            case "remove":
+            case "remove": {
                 if (!confirm) return interaction.reply({ content: "Tu dois confirmer la suppression de la soirée !", ephemeral: true });
 
                 const party = await Party.findOne({ where: { category_id: category.id } });
@@ -89,6 +90,7 @@ module.exports = {
                     console.error("admindb remove - " + error);
                     return interaction.reply({ content: "Une erreur est survenue lors de la suppression de la soirée !", ephemeral: true });
                 }
+            }
 
             default:
                 return interaction.reply("🚧〢Commande en cours de développement !");
