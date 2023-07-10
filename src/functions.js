@@ -1,20 +1,33 @@
 const { Collection, PermissionFlagsBits } = require("discord.js");
 const { Party } = require("./dbObjects");
-// const { adminCateId } = require(process.env.CONST.replace("../", ''));
+const { adminCateId, channelPanelId } = require(process.env.CONST.replace("../.", ""));
 
 /**
  * Syncs the database with the category party
  * @param {import("discord.js").Guild} guild
- * @param {string} cateId
+ * @param {import("discord.js").Channel} channel
  * @returns {boolean} If the party has been correctly synced
  */
-async function syncParty(guild, cateId) {
+async function syncParty(guild, channel) {
     /**
      * Get the party in the database
      */
-    const party = await Party.findOne({ where: { category_id: cateId } });
-    const category = await guild.channels.fetch(cateId);
-    if (!party || !category) return false;
+    if (!channel) return false;
+    if (channel.type !== 4) {
+        if (channel.parentId === null && channel.id !== channelPanelId) await channel.delete();
+        return false;
+    }
+
+    const party = await Party.findOne({ where: { category_id: channel.id } });
+    if (!party) {
+        if (channel.id !== adminCateId) {
+            await Promise.all(channel.children.cache.map(async function(channel1) {
+                await channel1.delete();
+            }));
+            await channel.delete();
+        }
+        return false;
+    }
 
 
     /**
@@ -22,14 +35,14 @@ async function syncParty(guild, cateId) {
      */
     const newGuestList = [];
     const newOrganizerList = [];
-    const listNewPerm = await category.permissionOverwrites.cache;
-    await listNewPerm.each(async function(perm) {
+    const listNewPerm = channel.permissionOverwrites.cache;
+    listNewPerm.each(async function(perm) {
         // If the permission is for a member
         if (perm.type === 1) {
             // Get the list of member who can see the category
-            if (await perm.allow.has(PermissionFlagsBits.ViewChannel) && perm.id !== party.organizer_id) {
+            if (perm.allow.has(PermissionFlagsBits.ViewChannel) && perm.id !== party.organizer_id) {
                 newGuestList.push(perm.id);
-                if (await perm.allow.has(PermissionFlagsBits.SendMessages)) newOrganizerList.push(perm.id);
+                if (perm.allow.has(PermissionFlagsBits.SendMessages)) newOrganizerList.push(perm.id);
             }
         }
     });
@@ -69,21 +82,21 @@ async function syncParty(guild, cateId) {
 
     // For locked channels
     await Promise.all(party.channels_locked_id.map(async channelLock => {
-        const channel = await guild.channels.fetch(channelLock);
-        if (channel && !(channel instanceof Collection)) {
-            await channel.lockPermissions();
-            await channel.permissionOverwrites.edit(guild.id, {
+        const channelLocked = await guild.channels.fetch(channelLock);
+        if (channelLocked && !(channelLocked instanceof Collection)) {
+            await channelLocked.lockPermissions();
+            await channelLocked.permissionOverwrites.edit(guild.id, {
                 ViewChannel: false,
                 SendMessages: false,
             });
             await Promise.all(newGuestList.map(async guest => {
                 if (newOrganizerList.includes(guest)) {
-                    await channel.permissionOverwrites.edit(guest, {
+                    await channelLocked.permissionOverwrites.edit(guest, {
                         ViewChannel: true,
                         SendMessages: true,
                     });
                 } else {
-                    await channel.permissionOverwrites.edit(guest, {
+                    await channelLocked.permissionOverwrites.edit(guest, {
                         ViewChannel: true,
                     });
                 }

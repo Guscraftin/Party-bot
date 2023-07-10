@@ -1,6 +1,7 @@
 const { Events } = require("discord.js");
 const { channelPanelId } = require(process.env.CONST);
 const { Party } = require("../../dbObjects");
+const { syncParty } = require("../../functions");
 const cron = require("cron");
 
 module.exports = {
@@ -12,6 +13,15 @@ module.exports = {
 
         // Sync the database
         await Party.sync({ alter: true });
+
+        // Sync the server with the database + Remove the old parties
+        const guild = await client.guilds.fetch(process.env.GUILD_ID);
+        if (guild) {
+            const channelFetch = await guild.channels.fetch();
+            await Promise.all(channelFetch.map(channel => {
+                syncParty(guild, channel);
+            }));
+        }
 
         // Set a message when the bot is ready
         console.log(`Ready! Logged in as ${client.user.username}`);
