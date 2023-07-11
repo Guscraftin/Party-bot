@@ -22,6 +22,7 @@ module.exports = {
                 syncParty(guild, channel);
             }));
         }
+        await sendDM(client);
 
         // Set the cron jobs
         new cron.CronJob("0 5 * * *", () => syncParties(client), null, true, "Europe/Paris");
@@ -55,9 +56,6 @@ async function syncParties(client) {
  * @returns void
  */
 async function sendDM(client) {
-    /**
-     * Send a DM to all the members who are not on the server
-     */
     const blacklistMP = ["376493881854001152"];
     // Honorin
 
@@ -70,27 +68,43 @@ async function sendDM(client) {
             await partGuild.fetch().then(async function(guild1) {
                 await guild1.members.fetch().then(async function(members) {
                     await members.each(async function(member) {
-                        try {
-                            if (await guildParty.members.fetch().then(membre => !membre.has(member.id) && !member.user.bot) && blacklistMP.find(userId => userId === member.id) === undefined) {
-                                try {
-                                    member.send(`👋 Salut ${member.username} !\n\n` +
-                                    `> Je viens te voir car __tu n'es toujours pas__ sur le serveur discord **\`${guildParty.name}\`**.\n` +
-                                    "> Ce serveur **regroupe tous les événements organisés par les personnes présentes sur les même serveurs que toi** !\n" +
-                                    `> Vient donc les rejoindre grâce à cette invitation ${inviteURL} afin que toi aussi tu puisses organiser tes soirées et être invité 🎉 !`);
-                                    console.log(`Envoie d'une invite à ${member.displayName}`);
-                                } catch (error) {
-                                    console.log(`Impossible d'envoyer une invitation à ${member.displayName}`);
+                        if (member.user.bot) return;
+                        if (guild1.id === process.env.GUILD_ID) {
+                            // Send DM to invite the member to change his nickname
+                            try {
+                                if (member.nickname === null) {
+                                    member.send(`## 👋 Salut ${member} !\n\n` +
+                                    `> Je viens te voir car __tu n'as toujours pas__ de pseudo sur le serveur discord **\`${guildParty.name}\`**.\n` +
+                                    "> Pour pouvoir organiser tes soirées et être invité, il est nécessaire d'avoir un pseudo sur le serveur.\n" +
+                                    `> Pour cela, il te suffit d'aller dans le salon <#${channelPanelId}> et de **cliquer sur le bouton \`✏️・Se renommer\`**.\n` +
+                                    "> Pour que ta demande de changement de pseudo soit acceptée, il faut que **ton nouveau pseudo commence par ton vrai prénom**.");
                                 }
+                            } catch (error) {
+                                console.log(`Impossible d'envoyer un message à ${member.displayName}`);        
                             }
-                        } catch (error) {
-                            console.log(`Impossible de vérifier si ${member.displayName} est sur le serveur`);
+                        } else {
+                            // Send DM to invite the member to the server
+                            try {
+                                if (await guildParty.members.fetch().then(membre => !membre.has(member.id) && !member.user.bot) && blacklistMP.find(userId => userId === member.id) === undefined) {
+                                    try {
+                                        member.send(`👋 Salut ${member.username} !\n\n` +
+                                        `> Je viens te voir car __tu n'es toujours pas__ sur le serveur discord **\`${guildParty.name}\`**.\n` +
+                                        "> Ce serveur **regroupe tous les événements organisés par les personnes présentes sur les même serveurs que toi** !\n" +
+                                        `> Vient donc les rejoindre grâce à cette invitation ${inviteURL} afin que toi aussi tu puisses organiser tes soirées et être invité 🎉 !`);
+                                        console.log(`Envoie d'une invite à ${member.displayName}`);
+                                    } catch (error) {
+                                        console.log(`Impossible d'envoyer une invitation à ${member.displayName}`);
+                                    }
+                                }
+                            } catch (error) {
+                                console.log(`Impossible de vérifier si ${member.displayName} est sur le serveur`);
+                            }
                         }
                     });
                 });
             });
         });
     });
-
 
 
 }
