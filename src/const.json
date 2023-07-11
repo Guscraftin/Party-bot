@@ -4,7 +4,9 @@
     "adminCateId": "1030925121428406383",
     "adminMessageId": "1030925121428406384",
     "adminPseudoLogId" : "1037488216183427202",
-
+    
+    "color_accept": "#008000",
+    "color_decline": "#9F2727",
     "color_basic": "#0099FF",
 
     "maxParty": 3

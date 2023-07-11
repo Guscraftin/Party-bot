@@ -1,4 +1,5 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const { color_accept } = require(process.env.CONST);
 
 /**
  * Come from the button "Accepter" in the file "src\modals\panel\modal-rename.js".
@@ -16,13 +17,14 @@ module.exports = {
         const member = await interaction.guild.members.fetch(membreId);
         if (!member) return interaction.reply({ content: "Le membre n'a pas été trouvé !", ephemeral: true });
 
-        const oldName = oldEmbed.fields[0].value;
+        const oldName = member.nickname ? member.nickname : oldEmbed.fields[0].value;
         const newName = oldEmbed.fields[1].value;
+        // TODO: format the new name
         await member.setNickname(newName, "Sur demande du membre après acceptation");
 
         const embed = new EmbedBuilder()
             .setAuthor(oldEmbed.author)
-            .setColor("#26b500")
+            .setColor(color_accept)
             .setDescription(oldEmbed.description)
             .addFields(oldEmbed.fields)
             .setFooter(oldEmbed.footer);
@@ -44,12 +46,12 @@ module.exports = {
                     .setDisabled(true),
             );
 
-        await interaction.message.edit({ embeds: [embed], components: [buttons] });
+        await interaction.message.edit({ embeds: [embed], components: [] });
         await member.send("A la suite de votre demande pour changer votre pseudo, celle-ci a été __acceptée__.\n" +
         `En effet, votre pseudo est passé de \`${oldName}\` à \`${newName}\` !`);
 
         await interaction.reply({
-            content: "Le membre a bien été renommé !",
+            content: "Le membre a bien été renommé et avertit de votre acceptation !",
             ephemeral: true,
         });
     },

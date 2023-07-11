@@ -3,7 +3,7 @@ const { Party } = require("../../dbObjects");
 const { getValidDate } = require("../../functions");
 
 /**
- * Come from the button "Créer une soirée" in the file "src\buttons\panel\createCate.js".
+ * Come from the button "Créer ta soirée" in the file "src\commands\admin\panel.js".
  */
 
 module.exports = {

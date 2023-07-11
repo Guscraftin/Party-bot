@@ -1,4 +1,5 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const { color_decline } = require(process.env.CONST);
 
 /**
  * Come from the button "Refuser" in the file "src\modals\panel\modal-rename.js".
@@ -19,7 +20,7 @@ module.exports = {
         const newName = oldEmbed.fields[1].value;
         const embed = new EmbedBuilder()
             .setAuthor(oldEmbed.author)
-            .setColor("#b50000")
+            .setColor(color_decline)
             .setDescription(oldEmbed.description)
             .addFields(oldEmbed.fields)
             .setFooter(oldEmbed.footer);
@@ -40,10 +41,10 @@ module.exports = {
                     .setStyle(ButtonStyle.Danger)
                     .setDisabled(true),
             );
-        await interaction.message.edit({ embeds: [embed], components: [buttons] });
+        await interaction.message.edit({ embeds: [embed], components: [] });
         await member.send("A la suite de votre demande pour changer votre pseudo, celle-ci a été __refusé__.\n" +
-            "En effet, **votre pseudo doit commencer par votre `Prénom`**.\n" +
-            `De ce fait, il reste \`${member.nickname}\` et ne change pas en \`${newName}\` !\n\n` +
+            "En effet, **votre pseudo doit commencer par votre `Prénom` suivit d'un espace**.\n" +
+            `De ce fait, il reste \`${member.displayName}\` et ne change pas en \`${newName}\` !\n` +
             "*PS : Pour toute réclamation ou pour en comprendre les raisons, envoyez un message à <@265785336175656970> !*",
         );
 
