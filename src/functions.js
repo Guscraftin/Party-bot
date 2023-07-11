@@ -16,11 +16,11 @@ async function getValidDate(startDate, endDate, interaction) {
     const [dayEnd, monthEnd, yearEnd] = endDate.split("/");
     const dateStart = new Date(yearStart, monthStart - 1, dayStart);
     const dateEnd = new Date(yearEnd, monthEnd - 1, dayEnd);
-    if (dateStart.toString() === "Invalid Date") {
+    if (dateStart.getDate() != dayStart || dateStart.getMonth() + 1 != monthStart || dateStart.getFullYear() != yearStart) {
         if (interaction) await interaction.reply({ content: `La date de début est invalide \`${startDate}\`.`, ephemeral: true });
         return "";
     }
-    if (dateEnd.toString() === "Invalid Date") {
+    if (dateEnd.getDate() != dayEnd || dateEnd.getMonth() + 1 != monthEnd || dateEnd.getFullYear() != yearEnd) {
         if (interaction) await interaction.reply({ content: `La date de fin est invalide \`${endDate}\`.`, ephemeral: true });
         return "";
     }
