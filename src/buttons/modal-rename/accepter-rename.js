@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const { color_accept } = require(process.env.CONST);
 
 /**
@@ -28,23 +28,6 @@ module.exports = {
             .setDescription(oldEmbed.description)
             .addFields(oldEmbed.fields)
             .setFooter(oldEmbed.footer);
-
-        const buttons = new ActionRowBuilder()
-            .addComponents(
-                new ButtonBuilder()
-                    .setCustomId("accepter")
-                    .setEmoji("✏️")
-                    .setLabel("Accepter")
-                    .setStyle(ButtonStyle.Success)
-                    .setDisabled(true),
-
-                new ButtonBuilder()
-                    .setCustomId("refuser")
-                    .setEmoji("⛔")
-                    .setLabel("Refuser")
-                    .setStyle(ButtonStyle.Danger)
-                    .setDisabled(true),
-            );
 
         await interaction.message.edit({ embeds: [embed], components: [] });
         await member.send("A la suite de votre demande pour changer votre pseudo, celle-ci a été __acceptée__.\n" +

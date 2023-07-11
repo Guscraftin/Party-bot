@@ -12,7 +12,7 @@ module.exports = {
     async execute(interaction) {
         const newName = interaction.fields.getTextInputValue("newName");
         const newNameFormat = newName[0].toUpperCase() + newName.slice(1);
-        
+
         /**
          * If the member has the same nickname
          */
@@ -21,7 +21,7 @@ module.exports = {
                 content: `Le pseudo demandé est déjà celui que vous avez actuellement soit \`${interaction.member.nickname}\` !`,
                 ephemeral: true,
             });
-        }    
+        }
 
 
         /**
@@ -30,7 +30,7 @@ module.exports = {
         if (interaction.member.nickname !== null) {
             const newNameSplit = newName.split(" ");
             const nameSplit = interaction.member.nickname.split(" ");
-            
+
             if (newNameSplit[0] == nameSplit[0]) {
                 const embed = new EmbedBuilder()
                     .setAuthor({ name: interaction.member.user.username, iconURL: interaction.member.user.displayAvatarURL() })

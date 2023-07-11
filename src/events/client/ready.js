@@ -22,13 +22,13 @@ module.exports = {
                 syncParty(guild, channel);
             }));
         }
-        
+
         // Set a message when the bot is ready
         console.log(`Ready! Logged in as ${client.user.username}`);
-        
+
         // Set the cron jobs
         new cron.CronJob("0 5 * * *", () => syncParties(client), null, true, "Europe/Paris");
-        
+
         // Call the sendDM function one time after 12 hours
         setTimeout(sendDM, 12 * 60 * 60 * 1000, client);
         // Call the sendDM function every 6 days
@@ -82,7 +82,7 @@ async function sendDM(client) {
                                     "> Pour que ta demande de changement de pseudo soit acceptée, il faut que **ton nouveau pseudo commence par ton vrai prénom**.");
                                 }
                             } catch (error) {
-                                console.log(`Impossible d'envoyer un message à ${member.displayName}`);        
+                                console.log(`Impossible d'envoyer un message à ${member.displayName}`);
                             }
                         } else {
                             // Send DM to invite the member to the server
