@@ -1,5 +1,6 @@
-const { ChannelType, SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 const { Party } = require("../../dbObjects");
+const { color_basic } = require(process.env.CONST);
 
 /**
  * Manage manually the database
@@ -112,9 +113,55 @@ module.exports = {
              * List all parties in the database
              */
             case "list":
-                // TODO: list all parties in the database
-                await interaction.reply({ content: "🚧〢Commande en cours de développement !", ephemeral: true });
-                break;
+                let parties;
+                try {
+                    parties = await Party.findAll();
+                } catch (error) {
+                    console.error("adminparty list - " + error);
+                    return interaction.reply({ content: "Une erreur est survenue lors de la récupération des soirées dans la base de donnée !", ephemeral: true });
+                }
+                if (!parties || parties.length == 0) return interaction.reply({ content: `Aucune soirée n'a été trouvée dans la base de donnée.`, ephemeral: true });
+
+                // Division of parties into groups of 10 for each page
+                const pageSize = 10;
+                const pageCount = Math.ceil(parties.length / pageSize);
+
+                // Displaying the first page of the parties
+                const currentPage = 1;
+                const startIndex = (currentPage - 1) * pageSize;
+                const endIndex = currentPage * pageSize;
+                const partyPage = parties.slice(startIndex, endIndex);
+
+                // Create embed fields
+                let fields = [];
+                partyPage.forEach(({ category_id, organizer_id, panel_organizer_id, channel_organizer_only, channel_without_organizer, channel_date_id }) => {
+                    fields.push({ name: `Id: ${category_id}`, value: `Panel: <#${panel_organizer_id}> - <@${organizer_id}>\nChannels: <#${channel_organizer_only}>・<#${channel_without_organizer}>\nDate: <#${channel_date_id}>` });
+                });
+
+                // Create embed
+                const embed = new EmbedBuilder()
+                    .setTitle(`Liste des soirées`)
+                    .addFields(fields)
+                    .setColor(color_basic)
+                    .setTimestamp()
+                    .setFooter({ text: `Page ${currentPage}/${pageCount}` })
+
+                // Displaying the navigation buttons
+                const navigationRow = new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId("party_previous")
+                            .setLabel("◀️")
+                            .setStyle(ButtonStyle.Primary)
+                            .setDisabled(currentPage === 1),
+                        new ButtonBuilder()
+                            .setCustomId("party_next")
+                            .setLabel("▶️")
+                            .setStyle(ButtonStyle.Primary)
+                            .setDisabled(currentPage === pageCount)
+                    );
+
+                return interaction.reply({ embeds: [embed], components: [navigationRow], ephemeral: true });
 
 
             /**
