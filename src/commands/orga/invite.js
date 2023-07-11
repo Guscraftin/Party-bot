@@ -34,25 +34,12 @@ module.exports = {
             });
         }
 
-        let withoutOrgaChannel;
         switch (interaction.options.getSubcommand()) {
             /**
              * Add a member to the party as a guest
              */
             case "ajouter":
                 if (party.guest_list_id.includes(member.id)) return interaction.reply({ content: `${member} est déjà sur votre liste d'invités à votre soirée !`, ephemeral: true });
-
-                try {
-                    const listGuest = party.guest_list_id;
-                    listGuest.push(member.id);
-                    await party.update({ guest_list_id: listGuest });
-                } catch (error) {
-                    console.error("invite add db - " + error);
-                    return interaction.reply({ content: "Une erreur est survenue lors de l'ajout de l'invité à votre soirée !", ephemeral: true });
-                }
-
-                withoutOrgaChannel = await interaction.guild.channels.fetch(await party.channel_without_organizer);
-                if (withoutOrgaChannel && !(withoutOrgaChannel instanceof Collection)) await withoutOrgaChannel.permissionOverwrites.create(member, { ViewChannel: true });
 
                 await channel.parent.permissionOverwrites.create(member, { ViewChannel: true });
 
@@ -65,23 +52,8 @@ module.exports = {
                 if (!party.guest_list_id.includes(member.id)) return interaction.reply({ content: `${member} n'est déjà pas sur votre liste d'invités à votre soirée !`, ephemeral: true });
 
                 if (party.organizer_list_id.includes(member.id)) return interaction.reply({ content: `${member} est dans votre liste d'organisateur pour votre soirée ! Vous ne pouvez pas le retirer de votre liste d'invités !\nSi vous souhaitez le retirer de votre soirée, utilisez la commande \`/orga retirer\` puis refaite cette commande.`, ephemeral: true });
-
-                withoutOrgaChannel = await interaction.guild.channels.fetch(party.channel_without_organizer);
-                if (withoutOrgaChannel && !(withoutOrgaChannel instanceof Collection)) await withoutOrgaChannel.permissionOverwrites.delete(member, `Par la volonté de l'organisateur (${member.id}) !`);
-
+                
                 await channel.parent.permissionOverwrites.delete(member, `Par la volonté de l'organisateur (${member.id}) !`);
-
-                try {
-                    const listGuest = party.guest_list_id;
-                    const index = listGuest.indexOf(member.id);
-                    if (index > -1) {
-                        listGuest.splice(index, 1);
-                        await party.update({ guest_list_id: listGuest });
-                    }
-                } catch (error) {
-                    console.error("invite remove db - " + error);
-                    return interaction.reply({ content: "Une erreur est survenue lors de la suppression de l'invité à votre soirée !", ephemeral: true });
-                }
 
                 return interaction.reply({ content: `${member} a bien été retiré de votre liste d'invités pour votre soirée !`, ephemeral: true });
         }
