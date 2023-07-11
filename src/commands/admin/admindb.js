@@ -7,7 +7,7 @@ const { Party } = require("../../dbObjects");
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName("adminparty")
+        .setName("admindb")
         .setDescription("🚧〢Pour gérer la base de donnée des soirées.")
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .setDMPermission(false)

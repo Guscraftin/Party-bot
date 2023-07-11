@@ -8,6 +8,5 @@ const sequelize = new Sequelize("database", "username", "password", {
 });
 
 const Party = require("./models/party.js")(sequelize, Sequelize.DataTypes);
-const Users = require("./models/users.js")(sequelize, Sequelize.DataTypes);
 
-module.exports = { Users, Party, sequelize };
+module.exports = { Party, sequelize };

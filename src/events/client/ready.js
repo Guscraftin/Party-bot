@@ -1,6 +1,6 @@
 const { Events } = require("discord.js");
 const { channelPanelId } = require(process.env.CONST);
-const { Party, Users } = require("../../dbObjects");
+const { Party } = require("../../dbObjects");
 const { syncParty } = require("../../functions");
 const cron = require("cron");
 
@@ -13,7 +13,6 @@ module.exports = {
 
         // Sync the database
         await Party.sync({ alter: true });
-        await Users.sync({ alter: true });
 
         // Sync the server with the database
         const guild = await client.guilds.fetch(process.env.GUILD_ID);
@@ -26,7 +25,7 @@ module.exports = {
 
         // Set the cron jobs
         new cron.CronJob("0 5 * * *", () => syncParties(client), null, true, "Europe/Paris");
-        new cron.CronJob("00 00 21 1,7,14,20,26 * *", () => sendDMJoin(client), null, true, "Europe/Paris");
+        new cron.CronJob("00 00 21 1,7,14,20,26 * *", () => sendDM(client), null, true, "Europe/Paris");
 
 
         // Set a message when the bot is ready
@@ -51,11 +50,14 @@ async function syncParties(client) {
 
 
 /**
- * Send a DM to all the members who are not on the server
+ * Send a DM to all the members who are not on the server and who are not a nickname on the server
  * @param {import(Discord.js).client} client
  * @returns void
  */
-async function sendDMJoin(client) {
+async function sendDM(client) {
+    /**
+     * Send a DM to all the members who are not on the server
+     */
     const blacklistMP = ["376493881854001152"];
     // Honorin
 
@@ -88,4 +90,7 @@ async function sendDMJoin(client) {
             });
         });
     });
+
+
+
 }

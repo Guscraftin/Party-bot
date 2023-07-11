@@ -1,5 +1,5 @@
 const { Collection, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
-const { adminPseudoLogId } = require(process.env.CONST);
+const { adminPseudoLogId, color_basic } = require(process.env.CONST);
 
 module.exports = {
     data: {
@@ -14,7 +14,7 @@ module.exports = {
         if (interaction.member.nickname === null) {
             const embed = new EmbedBuilder()
                 .setAuthor({ name: interaction.member.user.username, iconURL: interaction.member.user.displayAvatarURL() })
-                .setColor("#5193f8")
+                .setColor(color_basic)
                 .setDescription(`**${interaction.member} a changé son speudo !**\n`)
                 .addFields(
                     { name: "Ancien pseudo :", value: interaction.member.displayName, inline: true },
@@ -64,7 +64,7 @@ module.exports = {
         } else {
             const embed = new EmbedBuilder()
                 .setAuthor({ name: interaction.member.user.username, iconURL: interaction.member.user.displayAvatarURL() })
-                .setColor("#5193f8")
+                .setColor(color_basic)
                 .setDescription(`**${interaction.member} veut changer son speudo !**\n`)
                 .addFields(
                     { name: "Pseudo actuel :", value: interaction.member.nickname, inline: true },
