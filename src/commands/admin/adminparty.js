@@ -7,48 +7,48 @@ const { Party } = require("../../dbObjects");
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName("admindb")
-        .setDescription("🚧〢Pour gérer la base de donnée !")
+        .setName("adminparty")
+        .setDescription("🚧〢Pour gérer la base de donnée des soirées.")
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .setDMPermission(false)
         .addSubcommand(subcommand =>
             subcommand.setName("add")
-                .setDescription("🚧〢Pour ajouter une soirée à la db !")
+                .setDescription("🚧〢Pour ajouter une soirée à la db.")
                 .addUserOption(option =>
-                    option.setName("member").setDescription("L'organisateur principale de la soirée !").setRequired(true))
+                    option.setName("member").setDescription("L'organisateur principale de la soirée.").setRequired(true))
                 .addChannelOption(option =>
-                    option.setName("category").setDescription("La catégorie de la soirée !").addChannelTypes(ChannelType.GuildCategory).setRequired(true))
+                    option.setName("category").setDescription("La catégorie de la soirée.").addChannelTypes(ChannelType.GuildCategory).setRequired(true))
                 .addChannelOption(option =>
-                    option.setName("orga-panel").setDescription("Le panel pour l'organisateur principale !").addChannelTypes(ChannelType.GuildText).setRequired(true))
+                    option.setName("orga-panel").setDescription("Le panel pour l'organisateur principale.").addChannelTypes(ChannelType.GuildText).setRequired(true))
                 .addChannelOption(option =>
-                    option.setName("orga-only").setDescription("Le salon uniquement pour les organisateurs !").addChannelTypes(ChannelType.GuildText).setRequired(true))
+                    option.setName("orga-only").setDescription("Le salon uniquement pour les organisateurs.").addChannelTypes(ChannelType.GuildText).setRequired(true))
                 .addChannelOption(option =>
-                    option.setName("sans-orga").setDescription("Le salon seulement pour les invités !").addChannelTypes(ChannelType.GuildText).setRequired(true))
+                    option.setName("sans-orga").setDescription("Le salon seulement pour les invités.").addChannelTypes(ChannelType.GuildText).setRequired(true))
                 .addChannelOption(option =>
-                    option.setName("date").setDescription("Le salon pour voir la date de la soirée !").addChannelTypes(ChannelType.GuildVoice).setRequired(true)))
+                    option.setName("date").setDescription("Le salon pour voir la date de la soirée.").addChannelTypes(ChannelType.GuildVoice).setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand.setName("edit")
-                .setDescription("🚧〢Pour modifier une soirée de la db !")
+                .setDescription("🚧〢Pour modifier une soirée de la db.")
                 .addChannelOption(option =>
-                    option.setName("category").setDescription("La catégorie de la soirée !").addChannelTypes(ChannelType.GuildCategory).setRequired(true))
+                    option.setName("category").setDescription("La catégorie de la soirée.").addChannelTypes(ChannelType.GuildCategory).setRequired(true))
                 .addUserOption(option =>
-                    option.setName("member").setDescription("L'organisateur principale de la soirée !"))
+                    option.setName("member").setDescription("L'organisateur principale de la soirée."))
                 .addChannelOption(option =>
-                    option.setName("orga-panel").setDescription("Le panel pour l'organisateur principale !").addChannelTypes(ChannelType.GuildText))
+                    option.setName("orga-panel").setDescription("Le panel pour l'organisateur principale.").addChannelTypes(ChannelType.GuildText))
                 .addChannelOption(option =>
-                    option.setName("orga-only").setDescription("Le salon uniquement pour les organisateurs !").addChannelTypes(ChannelType.GuildText))
+                    option.setName("orga-only").setDescription("Le salon uniquement pour les organisateurs.").addChannelTypes(ChannelType.GuildText))
                 .addChannelOption(option =>
-                    option.setName("sans-orga").setDescription("Le salon seulement pour les invités !").addChannelTypes(ChannelType.GuildText))
+                    option.setName("sans-orga").setDescription("Le salon seulement pour les invités.").addChannelTypes(ChannelType.GuildText))
                 .addChannelOption(option =>
-                    option.setName("date").setDescription("Le salon pour voir la date de la soirée !").addChannelTypes(ChannelType.GuildVoice)))
+                    option.setName("date").setDescription("Le salon pour voir la date de la soirée.").addChannelTypes(ChannelType.GuildVoice)))
         .addSubcommand(subcommand =>
             subcommand.setName("list")
-                .setDescription("🚧〢Pour lister les soirées de la base de donnée !"))
+                .setDescription("🚧〢Pour lister les soirées de la base de donnée."))
         .addSubcommand(subcommand =>
             subcommand.setName("remove")
-                .setDescription("🚧〢Pour supprimer une soirée de la db !")
+                .setDescription("🚧〢Pour supprimer une soirée de la db.")
                 .addChannelOption(option =>
-                    option.setName("category").setDescription("La catégorie de la soirée !").addChannelTypes(ChannelType.GuildCategory).setRequired(true))
+                    option.setName("category").setDescription("La catégorie de la soirée.").addChannelTypes(ChannelType.GuildCategory).setRequired(true))
                 .addBooleanOption(option =>
                     option.setName("confirm").setDescription("Es-tu sur de vouloir supprimer cette soirée ?").setRequired(true))),
     async execute(interaction) {
@@ -80,7 +80,7 @@ module.exports = {
                     });
                     return interaction.reply({ content: "La soirée a bien été ajouté à la base de donnée !", ephemeral: true });
                 } catch (error) {
-                    console.error("admindb add - " + error);
+                    console.error("adminparty add - " + error);
                     return interaction.reply({ content: "Une erreur est survenue lors de l'ajout de la soirée dans la base de donnée !", ephemeral: true });
                 }
             }
@@ -102,7 +102,7 @@ module.exports = {
 
                     return interaction.reply({ content: "La soirée a bien été modifié dans la base de donnée !", ephemeral: true });
                 } catch (error) {
-                    console.error("admindb edit - " + error);
+                    console.error("adminparty edit - " + error);
                     return interaction.reply({ content: "Une erreur est survenue lors de la modification de la soirée dans la base de donnée !", ephemeral: true });
                 }
             }
@@ -130,13 +130,13 @@ module.exports = {
                     await party.destroy();
                     return interaction.reply({ content: "La soirée a bien été supprimé de la base de donnée !", ephemeral: true });
                 } catch (error) {
-                    console.error("admindb remove - " + error);
+                    console.error("adminparty remove - " + error);
                     return interaction.reply({ content: "Une erreur est survenue lors de la suppression de la soirée !", ephemeral: true });
                 }
             }
 
             default:
-                return interaction.reply("🚧〢Commande en cours de développement !");
+                return interaction.reply("Erreur lors de l'exécution de la commande !");
         }
     },
 };
