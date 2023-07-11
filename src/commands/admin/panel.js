@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require("discord.js");
-const { channelPanelId, adminCateId } = require(process.env.CONST);
+const { adminCateId, channelPanelId, color_basic } = require(process.env.CONST);
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -25,7 +25,7 @@ module.exports = {
             .setStyle(ButtonStyle.Secondary);
 
         const embed = new EmbedBuilder()
-            .setColor(0x0099FF)
+            .setColor(color_basic)
             .setTitle("Bienvenue sur le panel de contrôle")
             .setDescription("> __Voici le panel principal qui vous permet de :__\n> \n" +
             "> -> **🎉・Créer une soirée :** Une catégorie sera créer où vous pourrez organiser votre soirée ou votre événement;\n> \n" +
