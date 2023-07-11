@@ -8,16 +8,16 @@ module.exports = {
         .setDMPermission(false)
         .addSubcommand(subcommand =>
             subcommand.setName("verrouiller")
-                .setDescription("🎉〢Pour que tes invités ne puissent pas parler dans ce salon."))
+                .setDescription("🎊〢Pour que tes invités ne puissent pas parler dans ce salon."))
         .addSubcommand(subcommand =>
             subcommand.setName("déverrouiller")
-                .setDescription("🎉〢Pour permettre à tes invités de pourvoir parler dans ce salon."))
+                .setDescription("🎊〢Pour permettre à tes invités de pourvoir parler dans ce salon."))
         .addSubcommand(subcommand =>
             subcommand.setName("créer")
-                .setDescription("🎉〢Pour créer un nouveau salon."))
+                .setDescription("🎊〢Pour créer un nouveau salon."))
         .addSubcommand(subcommand =>
             subcommand.setName("supprimer")
-                .setDescription("🎉〢Pour supprimer un salon.")),
+                .setDescription("🎊〢Pour supprimer un salon.")),
 
     async execute(interaction) {
         const channelId = interaction.channelId;

@@ -98,7 +98,7 @@ module.exports = {
                     if (panelOrga) await party.update({ panel_organizer_id: panelOrga.id });
                     if (orgaOnly) await party.update({ channel_organizer_only: orgaOnly.id });
                     if (sansOrga) await party.update({ channel_without_organizer: sansOrga.id });
-                    if (date) await party.update({ channel_date_id: date.id }); 
+                    if (date) await party.update({ channel_date_id: date.id });
 
                     return interaction.reply({ content: "La soirée a bien été modifié dans la base de donnée !", ephemeral: true });
                 } catch (error) {

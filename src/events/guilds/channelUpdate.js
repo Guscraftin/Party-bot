@@ -45,7 +45,7 @@ module.exports = {
             let isOrganizerInCategory = true;
             if (listNewPerm.get(await party.organizer_id) === undefined || !listNewPerm.get(await party.organizer_id).allow.has(PermissionFlagsBits.ViewChannel)) isOrganizerInCategory = false;
 
-            if (isOrganizerInCategory) syncParty(newChannel.guild, category);
+            if (isOrganizerInCategory) {syncParty(newChannel.guild, category);}
             else {
                 // Send a message to the organizer
                 const panelOrganizerChannel = await newChannel.guild.channels.fetch(party.panel_organizer_id);

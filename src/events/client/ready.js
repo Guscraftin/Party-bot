@@ -27,7 +27,7 @@ module.exports = {
         new cron.CronJob("0 5 * * *", () => syncParties(client), null, true, "Europe/Paris");
         new cron.CronJob("00 00 21 1,7,14,20,26 * *", () => sendDMJoin(client), null, true, "Europe/Paris");
 
-        
+
         // Set a message when the bot is ready
         console.log(`Ready! Logged in as ${client.user.username}`);
     },
@@ -51,7 +51,7 @@ async function syncParties(client) {
 
 /**
  * Send a DM to all the members who are not on the server
- * @param {import(Discord.js).client} client 
+ * @param {import(Discord.js).client} client
  * @returns void
  */
 async function sendDMJoin(client) {

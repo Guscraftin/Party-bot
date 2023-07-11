@@ -1,4 +1,4 @@
-const { Collection, PermissionFlagsBits, SlashCommandBuilder } = require("discord.js");
+const { PermissionFlagsBits, SlashCommandBuilder } = require("discord.js");
 const { Party } = require("../../dbObjects");
 
 module.exports = {
@@ -8,11 +8,11 @@ module.exports = {
         .setDMPermission(false)
         .addSubcommand(subcommand =>
             subcommand.setName("ajouter")
-                .setDescription("🎉〢Pour ajouter un membre à sa soirée (sa catégorie).")
+                .setDescription("🎊〢Pour ajouter un membre à sa soirée (sa catégorie).")
                 .addUserOption(option => option.setName("membre").setDescription("Le membre ou l'id du membre à ajouter").setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand.setName("retirer")
-                .setDescription("🎉〢Pour retirer un membre à sa soirée (sa catégorie).")
+                .setDescription("🎊〢Pour retirer un membre à sa soirée (sa catégorie).")
                 .addUserOption(option => option.setName("membre").setDescription("Le membre ou l'id du membre à retirer").setRequired(true))),
 
     async execute(interaction) {
@@ -52,7 +52,7 @@ module.exports = {
                 if (!party.guest_list_id.includes(member.id)) return interaction.reply({ content: `${member} n'est déjà pas sur votre liste d'invités à votre soirée !`, ephemeral: true });
 
                 if (party.organizer_list_id.includes(member.id)) return interaction.reply({ content: `${member} est dans votre liste d'organisateur pour votre soirée ! Vous ne pouvez pas le retirer de votre liste d'invités !\nSi vous souhaitez le retirer de votre soirée, utilisez la commande \`/orga retirer\` puis refaite cette commande.`, ephemeral: true });
-                
+
                 await channel.parent.permissionOverwrites.delete(member, `Par la volonté de l'organisateur (${member.id}) !`);
 
                 return interaction.reply({ content: `${member} a bien été retiré de votre liste d'invités pour votre soirée !`, ephemeral: true });

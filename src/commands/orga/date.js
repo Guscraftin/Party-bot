@@ -32,10 +32,10 @@ module.exports = {
         // Check if the date is valid
         const nameVocal = await getValidDate(dateStart, dateEnd, interaction);
         if (nameVocal === "") return;
-        
+
         const vocalChannel = await interaction.guild.channels.fetch(party.channel_date_id);
         if (!vocalChannel || vocalChannel instanceof Collection) return interaction.reply({ content: "La récupération de la date a échoué.", ephemeral: true });
-        
+
         await vocalChannel.setName(nameVocal).catch(error => {
             console.error(error);
             return interaction.reply({ content: "La modification de la date a échoué.", ephemeral: true });

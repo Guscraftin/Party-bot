@@ -33,7 +33,7 @@ async function getValidDate(startDate, endDate, interaction) {
 
     const months = [
         "janv.", "févr.", "mars", "avr.", "mai", "juin",
-        "juil.", "août", "sept.", "oct.", "nov.", "déc."
+        "juil.", "août", "sept.", "oct.", "nov.", "déc.",
     ];
 
     if (monthStart === monthEnd) {
@@ -64,7 +64,7 @@ async function syncParty(guild, channel) {
     const party = await Party.findOne({ where: { category_id: channel.id } });
     if (!party) {
         if (channel.id !== adminCateId) {
-            await Promise.all(channel.children.cache.map(async function (channel1) {
+            await Promise.all(channel.children.cache.map(async function(channel1) {
                 await channel1.delete();
             }));
             await channel.delete();
@@ -79,7 +79,7 @@ async function syncParty(guild, channel) {
     const newGuestList = [];
     const newOrganizerList = [];
     const listNewPerm = channel.permissionOverwrites.cache;
-    listNewPerm.each(async function (perm) {
+    listNewPerm.each(async function(perm) {
         // If the permission is for a member
         if (perm.type === 1) {
             // Get the list of member who can see the category

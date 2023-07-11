@@ -67,5 +67,5 @@ module.exports = {
             default:
                 return interaction.reply({ content: "Votre commande n'existe pas !", ephemeral: true });
         }
-    }
-}
+    },
+};

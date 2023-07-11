@@ -14,11 +14,11 @@ module.exports = {
         const dateStart = interaction.fields.getTextInputValue("dateStart");
         const dateEnd = interaction.fields.getTextInputValue("dateEnd");
 
-        
+
         // Check the date format
         const nameVocal = await getValidDate(dateStart, dateEnd, interaction);
         if (nameVocal === "") return;
-        
+
         await interaction.deferReply({ ephemeral: true });
 
         // Create the category
