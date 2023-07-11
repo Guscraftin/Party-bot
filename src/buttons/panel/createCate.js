@@ -124,6 +124,9 @@ module.exports = {
                 },
                 {
                     id: interaction.guild.id,
+                    allow: [
+                        PermissionFlagsBits.MentionEveryone,
+                    ],
                     deny: [
                         PermissionFlagsBits.ViewChannel,
                         PermissionFlagsBits.ManageChannels,
@@ -140,6 +143,9 @@ module.exports = {
             permissionOverwrites: [
                 {
                     id: interaction.guild.id,
+                    allow: [
+                        PermissionFlagsBits.MentionEveryone,
+                    ],
                     deny: [
                         PermissionFlagsBits.ViewChannel,
                     ],

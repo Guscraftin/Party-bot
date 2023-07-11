@@ -49,7 +49,7 @@ async function syncParty(guild, channel) {
     try {
         await party.update({ guest_list_id: newGuestList, organizer_list_id: newOrganizerList });
     } catch (error) {
-        console.error("channelUpdate guestList - " + error);
+        console.error("functions syncParty - " + error);
     }
 
 
@@ -59,26 +59,43 @@ async function syncParty(guild, channel) {
     // For particular channels
     const withoutOrgaChannel = await guild.channels.fetch(await party.channel_without_organizer);
     const organizersOnlyChannel = await guild.channels.fetch(await party.channel_organizer_only);
-    if (!withoutOrgaChannel || withoutOrgaChannel instanceof Collection) return false;
-    if (!organizersOnlyChannel || organizersOnlyChannel instanceof Collection) return false;
+    if (withoutOrgaChannel && !(withoutOrgaChannel instanceof Collection) && organizersOnlyChannel && !(organizersOnlyChannel instanceof Collection)) {
+        const newOrganizerPerms = [{
+            id: guild.id,
+            allow: PermissionFlagsBits.MentionEveryone,
+            deny: [
+                PermissionFlagsBits.ViewChannel,
+                PermissionFlagsBits.ManageChannels,
+                PermissionFlagsBits.ManageRoles,
+                PermissionFlagsBits.CreateInstantInvite,
+            ],
+        },{
+            id: party.organizer_id,
+            allow: PermissionFlagsBits.ViewChannel,
+        }];
+        const newGuestPerms = [{
+            id: guild.id,
+            allow: PermissionFlagsBits.MentionEveryone,
+            deny: PermissionFlagsBits.ViewChannel,
+        }];
+        newGuestList.forEach(guest => {
+            if (newOrganizerList.includes(guest)) {
+                newOrganizerPerms.push({
+                    id: guest,
+                    allow: PermissionFlagsBits.ViewChannel,
+                });
+            } else {
+                newGuestPerms.push({
+                    id: guest,
+                    allow: PermissionFlagsBits.ViewChannel,
 
-    const newOrganizerPerms = [];
-    const newGuestPerms = [];
-    newGuestList.forEach(guest => {
-        if (newOrganizerList.includes(guest)) {
-            newOrganizerPerms.push({
-                id: guest,
-                allow: PermissionFlagsBits.ViewChannel,
-            });
-        } else {
-            newGuestPerms.push({
-                id: guest,
-                allow: PermissionFlagsBits.ViewChannel,
-            });
-        }
-    });
-    await withoutOrgaChannel.permissionOverwrites.set(newGuestPerms);
-    await organizersOnlyChannel.permissionOverwrites.set(newOrganizerPerms);
+                });
+            }
+        });
+        await withoutOrgaChannel.permissionOverwrites.set(newGuestPerms);
+        await organizersOnlyChannel.permissionOverwrites.set(newOrganizerPerms);
+    }
+
 
     // For locked channels
     await Promise.all(party.channels_locked_id.map(async channelLock => {
