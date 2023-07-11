@@ -19,6 +19,11 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: "",
             allowNull: false,
         },
+        channel_date_id: {
+            type: DataTypes.STRING,
+            defaultValue: "",
+            allowNull: false,
+        },
         channels_locked_id: {
             type: DataTypes.TEXT,
             defaultValue: "[]",
