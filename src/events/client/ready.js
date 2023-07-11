@@ -1,6 +1,6 @@
 const { Events } = require("discord.js");
 const { channelPanelId } = require(process.env.CONST);
-const { Party } = require("../../dbObjects");
+const { Party, Users } = require("../../dbObjects");
 const { syncParty } = require("../../functions");
 const cron = require("cron");
 
@@ -13,6 +13,7 @@ module.exports = {
 
         // Sync the database
         await Party.sync({ alter: true });
+        await Users.sync({ alter: true });
 
         // Sync the server with the database
         const guild = await client.guilds.fetch(process.env.GUILD_ID);
