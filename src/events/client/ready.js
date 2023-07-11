@@ -22,15 +22,17 @@ module.exports = {
                 syncParty(guild, channel);
             }));
         }
-        await sendDM(client);
-
-        // Set the cron jobs
-        new cron.CronJob("0 5 * * *", () => syncParties(client), null, true, "Europe/Paris");
-        new cron.CronJob("00 00 21 1,7,14,20,26 * *", () => sendDM(client), null, true, "Europe/Paris");
-
-
+        
         // Set a message when the bot is ready
         console.log(`Ready! Logged in as ${client.user.username}`);
+        
+        // Set the cron jobs
+        new cron.CronJob("0 5 * * *", () => syncParties(client), null, true, "Europe/Paris");
+        
+        // Call the sendDM function one time after 12 hours
+        setTimeout(sendDM, 12 * 60 * 60 * 1000, client);
+        // Call the sendDM function every 6 days
+        setInterval(sendDM, 6 * 24 * 60 * 60 * 1000, client);
     },
 };
 
