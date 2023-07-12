@@ -11,7 +11,8 @@ module.exports = {
     },
     async execute(interaction) {
         const newName = interaction.fields.getTextInputValue("newName");
-        const newNameFormat = newName[0].toUpperCase() + newName.slice(1);
+        const newNamePart1 = newName.slice(1).split(" ");
+        const newNameFormat = newName[0].toUpperCase() + newNamePart1[0].toLowerCase() + " " + newNamePart1.slice(1).join(" ");
 
         /**
          * If the member has the same nickname
@@ -28,7 +29,7 @@ module.exports = {
          * If the member has already a nickname and the new nickname as the same first part of the old one
          */
         if (interaction.member.nickname !== null) {
-            const newNameSplit = newName.split(" ");
+            const newNameSplit = newNameFormat.split(" ");
             const nameSplit = interaction.member.nickname.split(" ");
 
             if (newNameSplit[0] == nameSplit[0]) {
@@ -52,6 +53,7 @@ module.exports = {
                     content: "Votre pseudo a bien été changé !",
                     ephemeral: true,
                 });
+            // If the new nickname as not the same first part of the old one
             } else {
                 return interaction.reply({
                     content: `Votre nouveau pseudo (\`${newName}\`) doit commencer par \`${nameSplit[0]} \` pour être changé.`,

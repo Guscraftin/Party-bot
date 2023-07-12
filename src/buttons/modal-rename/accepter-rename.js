@@ -19,7 +19,6 @@ module.exports = {
 
         const oldName = member.nickname ? member.nickname : oldEmbed.fields[0].value;
         const newName = oldEmbed.fields[1].value;
-        // TODO: format the new name
         await member.setNickname(newName, "Sur demande du membre après acceptation");
 
         const embed = new EmbedBuilder()
