@@ -41,7 +41,20 @@ module.exports = {
             try {
                 await modal.execute(interaction);
             } catch (error) {
-                console.error(`Erreur d'exécution du boutton : ${interaction.customId}`);
+                console.error(`Erreur d'exécution du modal : ${interaction.customId}`);
+                console.error(error);
+            }
+
+        } else if (interaction.isStringSelectMenu()) {
+            const { selectMenus } = interaction.client;
+            const { customId } = interaction;
+            const selectMenu = selectMenus.get(customId);
+            if (!selectMenu) return new Error("There is no code for this selectMenu.");
+
+            try {
+                await selectMenu.execute(interaction);
+            } catch (error) {
+                console.error(`Erreur d'exécution du selectMenu : ${interaction.customId}`);
                 console.error(error);
             }
 

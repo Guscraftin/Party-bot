@@ -17,6 +17,7 @@ const client = new Client({
 client.commands = new Collection();
 client.buttons = new Collection();
 client.modals = new Collection();
+client.selectMenus = new Collection();
 
 
 const commandsPath = path.join(__dirname, "src/commands");
@@ -98,6 +99,27 @@ for (const modalsFolder of modalsFolders) {
             client.modals.set(modal.data.name, modal);
         } else {
             console.log(`[WARNING] The modal at ${filePath} is missing a required "data" or "execute" property.`);
+        }
+    }
+}
+
+
+const selectMenusPath = path.join(__dirname, "src/selectMenus");
+const selectMenusFolders = fs.readdirSync(selectMenusPath);
+
+for (const selectMenusFolder of selectMenusFolders) {
+    const selectMenusPath1 = path.join(selectMenusPath, selectMenusFolder);
+    const selectMenuFiles = fs.readdirSync(selectMenusPath1).filter(
+        (file) => file.endsWith(".js"),
+    );
+
+    for (const file of selectMenuFiles) {
+        const filePath = path.join(selectMenusPath1, file);
+        const selectMenu = require(filePath);
+        if ("data" in selectMenu && "execute" in selectMenu) {
+            client.selectMenus.set(selectMenu.data.name, selectMenu);
+        } else {
+            console.log(`[WARNING] The selectMenu at ${filePath} is missing a required "data" or "execute" property.`);
         }
     }
 }
