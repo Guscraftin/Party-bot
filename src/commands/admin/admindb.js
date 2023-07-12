@@ -112,7 +112,7 @@ module.exports = {
             /**
              * List all parties in the database
              */
-            case "list":
+            case "list": {
                 let parties;
                 try {
                     parties = await Party.findAll();
@@ -120,7 +120,7 @@ module.exports = {
                     console.error("adminparty list - " + error);
                     return interaction.reply({ content: "Une erreur est survenue lors de la récupération des soirées dans la base de donnée !", ephemeral: true });
                 }
-                if (!parties || parties.length == 0) return interaction.reply({ content: `Aucune soirée n'a été trouvée dans la base de donnée.`, ephemeral: true });
+                if (!parties || parties.length == 0) return interaction.reply({ content: "Aucune soirée n'a été trouvée dans la base de donnée.", ephemeral: true });
 
                 // Division of parties into groups of 10 for each page
                 const pageSize = 10;
@@ -133,18 +133,18 @@ module.exports = {
                 const partyPage = parties.slice(startIndex, endIndex);
 
                 // Create embed fields
-                let fields = [];
+                const fields = [];
                 partyPage.forEach(({ category_id, organizer_id, panel_organizer_id, channel_organizer_only, channel_without_organizer, channel_date_id }) => {
                     fields.push({ name: `Id: ${category_id}`, value: `Panel: <#${panel_organizer_id}> - <@${organizer_id}>\nChannels: <#${channel_organizer_only}>・<#${channel_without_organizer}>\nDate: <#${channel_date_id}>` });
                 });
 
                 // Create embed
                 const embed = new EmbedBuilder()
-                    .setTitle(`Liste des soirées`)
+                    .setTitle("Liste des soirées")
                     .addFields(fields)
                     .setColor(color_basic)
                     .setTimestamp()
-                    .setFooter({ text: `Page ${currentPage}/${pageCount}` })
+                    .setFooter({ text: `Page ${currentPage}/${pageCount}` });
 
                 // Displaying the navigation buttons
                 const navigationRow = new ActionRowBuilder()
@@ -158,11 +158,11 @@ module.exports = {
                             .setCustomId("party_next")
                             .setLabel("▶️")
                             .setStyle(ButtonStyle.Primary)
-                            .setDisabled(currentPage === pageCount)
+                            .setDisabled(currentPage === pageCount),
                     );
 
                 return interaction.reply({ embeds: [embed], components: [navigationRow], ephemeral: true });
-
+            }
 
             /**
              * Remove a party in the database

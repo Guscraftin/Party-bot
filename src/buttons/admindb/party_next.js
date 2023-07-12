@@ -33,16 +33,16 @@ module.exports = {
         const partyPage = parties.slice(startIndex, endIndex);
 
         // Display the party
-        let fields = [];
+        const fields = [];
         partyPage.forEach(({ category_id, organizer_id, panel_organizer_id, channel_organizer_only, channel_without_organizer, channel_date_id }) => {
             fields.push({ name: `Id: ${category_id}`, value: `Panel: <#${panel_organizer_id}> - <@${organizer_id}>\nChannels: <#${channel_organizer_only}>・<#${channel_without_organizer}>\nDate: <#${channel_date_id}>` });
         });
-        let embed = new EmbedBuilder()
+        const embed = new EmbedBuilder()
             .setTitle(oldEmbed.title)
             .setDescription(oldEmbed.description)
             .setFields(fields)
             .setColor(oldEmbed.color)
-            .setFooter({ text: `Page ${nextPage}/${pageCount}`});
+            .setFooter({ text: `Page ${nextPage}/${pageCount}` });
 
         // Displaying the navigation buttons
         const navigationRow = new ActionRowBuilder()
@@ -56,9 +56,9 @@ module.exports = {
                     .setCustomId("party_next")
                     .setLabel("▶️")
                     .setStyle(ButtonStyle.Primary)
-                    .setDisabled(nextPage === pageCount)
+                    .setDisabled(nextPage === pageCount),
             );
 
         return interaction.update({ embeds: [embed], components: [navigationRow], ephemeral: true });
-    }
-}
+    },
+};
