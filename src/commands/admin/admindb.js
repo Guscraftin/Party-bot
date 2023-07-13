@@ -9,16 +9,16 @@ const { color_basic } = require(process.env.CONST);
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("admindb")
-        .setDescription("🚧〢Pour gérer la base de donnée des soirées.")
+        .setDescription("🚧〢Pour gérer la base de donnée des fêtes.")
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .setDMPermission(false)
         .addSubcommand(subcommand =>
             subcommand.setName("add")
-                .setDescription("🚧〢Pour ajouter une soirée à la db.")
+                .setDescription("🚧〢Pour ajouter une fête à la db.")
                 .addUserOption(option =>
-                    option.setName("member").setDescription("L'organisateur principale de la soirée.").setRequired(true))
+                    option.setName("member").setDescription("L'organisateur principale de la fête.").setRequired(true))
                 .addChannelOption(option =>
-                    option.setName("category").setDescription("La catégorie de la soirée.").addChannelTypes(ChannelType.GuildCategory).setRequired(true))
+                    option.setName("category").setDescription("La catégorie de la fête.").addChannelTypes(ChannelType.GuildCategory).setRequired(true))
                 .addChannelOption(option =>
                     option.setName("orga-panel").setDescription("Le panel pour l'organisateur principale.").addChannelTypes(ChannelType.GuildText).setRequired(true))
                 .addChannelOption(option =>
@@ -26,14 +26,14 @@ module.exports = {
                 .addChannelOption(option =>
                     option.setName("sans-orga").setDescription("Le salon seulement pour les invités.").addChannelTypes(ChannelType.GuildText).setRequired(true))
                 .addChannelOption(option =>
-                    option.setName("date").setDescription("Le salon pour voir la date de la soirée.").addChannelTypes(ChannelType.GuildVoice).setRequired(true)))
+                    option.setName("date").setDescription("Le salon pour voir la date de la fête.").addChannelTypes(ChannelType.GuildVoice).setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand.setName("edit")
-                .setDescription("🚧〢Pour modifier une soirée de la db.")
+                .setDescription("🚧〢Pour modifier une fête de la db.")
                 .addChannelOption(option =>
-                    option.setName("category").setDescription("La catégorie de la soirée.").addChannelTypes(ChannelType.GuildCategory).setRequired(true))
+                    option.setName("category").setDescription("La catégorie de la fête.").addChannelTypes(ChannelType.GuildCategory).setRequired(true))
                 .addUserOption(option =>
-                    option.setName("member").setDescription("L'organisateur principale de la soirée."))
+                    option.setName("member").setDescription("L'organisateur principale de la fête."))
                 .addChannelOption(option =>
                     option.setName("orga-panel").setDescription("Le panel pour l'organisateur principale.").addChannelTypes(ChannelType.GuildText))
                 .addChannelOption(option =>
@@ -41,17 +41,17 @@ module.exports = {
                 .addChannelOption(option =>
                     option.setName("sans-orga").setDescription("Le salon seulement pour les invités.").addChannelTypes(ChannelType.GuildText))
                 .addChannelOption(option =>
-                    option.setName("date").setDescription("Le salon pour voir la date de la soirée.").addChannelTypes(ChannelType.GuildVoice)))
+                    option.setName("date").setDescription("Le salon pour voir la date de la fête.").addChannelTypes(ChannelType.GuildVoice)))
         .addSubcommand(subcommand =>
             subcommand.setName("list")
-                .setDescription("🚧〢Pour lister les soirées de la base de donnée."))
+                .setDescription("🚧〢Pour lister les fêtes de la base de donnée."))
         .addSubcommand(subcommand =>
             subcommand.setName("remove")
-                .setDescription("🚧〢Pour supprimer une soirée de la db.")
+                .setDescription("🚧〢Pour supprimer une fête de la db.")
                 .addChannelOption(option =>
-                    option.setName("category").setDescription("La catégorie de la soirée.").addChannelTypes(ChannelType.GuildCategory).setRequired(true))
+                    option.setName("category").setDescription("La catégorie de la fête.").addChannelTypes(ChannelType.GuildCategory).setRequired(true))
                 .addBooleanOption(option =>
-                    option.setName("confirm").setDescription("Es-tu sur de vouloir supprimer cette soirée ?").setRequired(true))),
+                    option.setName("confirm").setDescription("Es-tu sur de vouloir supprimer cette fête ?").setRequired(true))),
     async execute(interaction) {
         const member = interaction.options.getMember("member");
         const category = interaction.options.getChannel("category");
@@ -68,7 +68,7 @@ module.exports = {
              */
             case "add": {
                 const partyExist = await Party.findOne({ where: { category_id: category.id } });
-                if (partyExist) return interaction.reply({ content: "Cette soirée existe déjà dans la base de donnée !", ephemeral: true });
+                if (partyExist) return interaction.reply({ content: "Cette fête existe déjà dans la base de donnée !", ephemeral: true });
 
                 try {
                     await Party.create({
@@ -79,10 +79,10 @@ module.exports = {
                         channel_date_id: date.id,
                         organizer_id: member.id,
                     });
-                    return interaction.reply({ content: "La soirée a bien été ajouté à la base de donnée !", ephemeral: true });
+                    return interaction.reply({ content: "La fête a bien été ajouté à la base de donnée !", ephemeral: true });
                 } catch (error) {
                     console.error("adminparty add - " + error);
-                    return interaction.reply({ content: "Une erreur est survenue lors de l'ajout de la soirée dans la base de donnée !", ephemeral: true });
+                    return interaction.reply({ content: "Une erreur est survenue lors de l'ajout de la fête dans la base de donnée !", ephemeral: true });
                 }
             }
 
@@ -92,7 +92,7 @@ module.exports = {
              */
             case "edit": {
                 const party = await Party.findOne({ where: { category_id: category.id } });
-                if (!party) return interaction.reply({ content: "Cette soirée n'existe pas dans la base de donnée !", ephemeral: true });
+                if (!party) return interaction.reply({ content: "Cette fête n'existe pas dans la base de donnée !", ephemeral: true });
 
                 try {
                     if (member) await party.update({ organizer_id: member.id });
@@ -101,10 +101,10 @@ module.exports = {
                     if (sansOrga) await party.update({ channel_without_organizer: sansOrga.id });
                     if (date) await party.update({ channel_date_id: date.id });
 
-                    return interaction.reply({ content: "La soirée a bien été modifié dans la base de donnée !", ephemeral: true });
+                    return interaction.reply({ content: "La fête a bien été modifié dans la base de donnée !", ephemeral: true });
                 } catch (error) {
                     console.error("adminparty edit - " + error);
-                    return interaction.reply({ content: "Une erreur est survenue lors de la modification de la soirée dans la base de donnée !", ephemeral: true });
+                    return interaction.reply({ content: "Une erreur est survenue lors de la modification de la fête dans la base de donnée !", ephemeral: true });
                 }
             }
 
@@ -118,9 +118,9 @@ module.exports = {
                     parties = await Party.findAll();
                 } catch (error) {
                     console.error("adminparty list - " + error);
-                    return interaction.reply({ content: "Une erreur est survenue lors de la récupération des soirées dans la base de donnée !", ephemeral: true });
+                    return interaction.reply({ content: "Une erreur est survenue lors de la récupération des fêtes dans la base de donnée !", ephemeral: true });
                 }
-                if (!parties || parties.length == 0) return interaction.reply({ content: "Aucune soirée n'a été trouvée dans la base de donnée.", ephemeral: true });
+                if (!parties || parties.length == 0) return interaction.reply({ content: "Aucune fête n'a été trouvée dans la base de donnée.", ephemeral: true });
 
                 // Division of parties into groups of 10 for each page
                 const pageSize = 10;
@@ -140,7 +140,7 @@ module.exports = {
 
                 // Create embed
                 const embed = new EmbedBuilder()
-                    .setTitle("Liste des soirées")
+                    .setTitle("Liste des fêtes")
                     .addFields(fields)
                     .setColor(color_basic)
                     .setTimestamp()
@@ -168,17 +168,17 @@ module.exports = {
              * Remove a party in the database
              */
             case "remove": {
-                if (!confirm) return interaction.reply({ content: "Tu dois confirmer la suppression de la soirée !", ephemeral: true });
+                if (!confirm) return interaction.reply({ content: "Tu dois confirmer la suppression de la fête !", ephemeral: true });
 
                 const party = await Party.findOne({ where: { category_id: category.id } });
-                if (!party) return interaction.reply({ content: "Cette soirée n'existe pas dans la base de donnée !", ephemeral: true });
+                if (!party) return interaction.reply({ content: "Cette fête n'existe pas dans la base de donnée !", ephemeral: true });
 
                 try {
                     await party.destroy();
-                    return interaction.reply({ content: "La soirée a bien été supprimé de la base de donnée !", ephemeral: true });
+                    return interaction.reply({ content: "La fête a bien été supprimé de la base de donnée !", ephemeral: true });
                 } catch (error) {
                     console.error("adminparty remove - " + error);
-                    return interaction.reply({ content: "Une erreur est survenue lors de la suppression de la soirée !", ephemeral: true });
+                    return interaction.reply({ content: "Une erreur est survenue lors de la suppression de la fête !", ephemeral: true });
                 }
             }
 

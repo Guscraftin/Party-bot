@@ -58,7 +58,7 @@ module.exports = {
             const panelOrganizerChannel = await member.guild.channels.fetch(party.panel_organizer_id);
             if (panelOrganizerChannel && !(panelOrganizerChannel instanceof Collection)) {
                 await panelOrganizerChannel.send(`**${member} a quitté le serveur !**\n` +
-                `${isOaganizer ? "Il était un des organisateurs de ta soirée." : (isGuest ? "Il était sur ta liste d'invité à ta soirée." : "") }`);
+                `${isOaganizer ? "Il était un des organisateurs de ta fête." : (isGuest ? "Il était sur ta liste d'invité à ta fête." : "") }`);
             }
         });
     },

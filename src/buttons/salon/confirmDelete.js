@@ -1,5 +1,5 @@
 /**
- * Come from the button "Supprimer la soirée" in the file "src\buttons\salon\delete.js".
+ * Come from the button "Supprimer la fête" in the file "src\buttons\salon\delete.js".
  * Delete a channel in a category (party) by the organizer.
  */
 
@@ -9,6 +9,6 @@ module.exports = {
     },
     async execute(interaction) {
         await interaction.channel.delete("Sur demande de l'organisateur !");
-        return interaction.reply({ content: "La soirée a bien été supprimé !", ephemeral: true });
+        return interaction.reply({ content: "La fête a bien été supprimé !", ephemeral: true });
     },
 };

@@ -27,7 +27,7 @@ module.exports = {
 
         // Catch the exception of the permission
         const party = await Party.findOne({ where: { category_id: channel.parentId } });
-        if (!party) return interaction.reply({ content: "Cette catégorie n'est pas une soirée !", ephemeral: true });
+        if (!party) return interaction.reply({ content: "Cette catégorie n'est pas une fête !", ephemeral: true });
 
         if (party.organizer_id !== interaction.member.id && !party.organizer_list_id.includes(interaction.member.id)) {
             if (channel.id !== party.channel_without_organizer) return interaction.reply({ content: `Vous pouvez uniquement utiliser cette commande dans <#${party.channel_without_organizer}>.`, ephemeral: true });

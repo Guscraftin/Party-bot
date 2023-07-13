@@ -45,16 +45,16 @@ module.exports = {
 - \`Tout le monde\` : Toutes les informations utiles pour tout le monde.
 - \`Menu principal\` : Retour à ce menu principal.
 
-## Organisation d'une soirée :
+## Organisation d'une fête :
 - \`#orga-panel\` : Le salon uniquement accessible pour l'organisateur principal afin d'être averti quand un membre quitte sa fête ou quand un membre rejoint ou quitte le serveur.
 - \`#orga-only\` : Le salon réservé aux organisateurs sans les invités.
 - \`#sans-orga\` : Le salon réservé aux invités. L'organisateur principal et les organisateurs n'y ont pas accès.
 - \`#discussion\` : Le salon basique où tous les invités à la fête peuvent discuter par défaut.
-- \`#Date: ...\` : La date de la soirée.
+- \`#Date: ...\` : La date de la fête.
 
 ## Informations indispensables pour l'organisateur principal :
 - Ne pas modifier les permissions des salons sans passer par les commandes du bot (sauf pour les permissions de la catégorie). Si vous modifiez les permissions d'un salon, le bot les resynchronisera avec la base de données et les permissions de la catégorie.
-- Lors de la création d'une soirée, invitez d'abord les organisateurs en les assignant comme organisateurs avec la commande adéquate avant d'inviter les invités. (Cela évite que les organisateurs aient accès au contenu du salon \`#sans-orga\`.)
+- Lors de la création d'une fête, invitez d'abord les organisateurs en les assignant comme organisateurs avec la commande adéquate avant d'inviter les invités. (Cela évite que les organisateurs aient accès au contenu du salon \`#sans-orga\`.)
 
 En cas de difficulté ou de suggestions, vous pouvez envoyer un message privé à <@265785336175656970>.`,
             components: [selectMenu],

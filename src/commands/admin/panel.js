@@ -11,7 +11,7 @@ module.exports = {
     async execute(interaction) {
         const createButton = new ButtonBuilder()
             .setCustomId("createCate")
-            .setLabel("🎉・Créer une soirée !")
+            .setLabel("🎉・Créer une fête !")
             .setStyle(ButtonStyle.Success);
 
         const renameButton = new ButtonBuilder()
@@ -28,7 +28,7 @@ module.exports = {
             .setColor(color_basic)
             .setTitle("Bienvenue sur le panel de contrôle")
             .setDescription("> __Voici le panel principal qui vous permet de :__\n> \n" +
-            "> -> **🎉・Créer une soirée :** Une catégorie sera créer où vous pourrez organiser votre soirée ou votre événement;\n> \n" +
+            "> -> **🎉・Créer une fête :** Une catégorie sera créer où vous pourrez organiser votre fête ou votre événement;\n> \n" +
             "> -> **✏️・Se renommer :** Vous permet de vous renommer sur le serveur notamment pour faciliter les invitations aux événements;\n> \n" +
             "> -> **📰・Documentation :** Pour une explication détaillée des principales fonctionnalités disponibles sur ce serveur.\n\n" +
             "*Ces fonctionnalités sont disponible en cliquant sur les boutons ci dessous.*");

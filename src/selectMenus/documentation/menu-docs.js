@@ -120,7 +120,7 @@ En cas de difficulté, vous pouvez envoyer un message privé à <@26578533617565
             
 ## Informations :
 Vous avez à disposition dans ce salon un panel afin d'accéder à trois fonctionnalités.
-- \`🎉・Créer une soirée!\` : Pour créer votre propre soirée. Il vous sera demandé la date de début et de fin de votre soirée.
+- \`🎉・Créer une fête!\` : Pour créer votre propre fête. Il vous sera demandé la date de début et de fin de votre fête.
 - \`✏️・Se renommer\` : Vous permet de vous renommer sur le serveur discord. Sachez que vous pouvez vous renommer autant de fois que vous le souhaitez du moment que votre pseudo commence par votre prénom. La première fois que vous effectuez une demande, un modérateur devra valider votre demande avant que vous puissiez vous renommer. Et les fois suivantes, votre demande sera automatiquement validée ou refusée. Tant que vous n'avez pas été renommé, vous recevrez un message privé de <@${process.env.CLIENT_ID}>. Même si votre pseudo discord est déjà votre prénom, vous devez effectuer cette demande afin d'éviter de recevoir les messages du bot.
 - \`📰・Documentation\` : Vous permet d'accéder à cette documentation qui détaille toutes les commandes et systèmes mis en place sur ce serveur discord afin de vous simplifier la vie.
 
@@ -154,16 +154,16 @@ En cas de difficulté, vous pouvez envoyer un message privé à <@26578533617565
 - \`Tout le monde\` : Toutes les informations utiles pour tout le monde.
 - \`Menu principal\` : Retour à ce menu principal.
 
-## Organisation d'une soirée :
+## Organisation d'une fête :
 - \`#orga-panel\` : Le salon uniquement accessible pour l'organisateur principal afin d'être averti quand un membre quitte sa fête ou quand un membre rejoint ou quitte le serveur.
 - \`#orga-only\` : Le salon réservé aux organisateurs sans les invités.
 - \`#sans-orga\` : Le salon réservé aux invités. L'organisateur principal et les organisateurs n'y ont pas accès.
 - \`#discussion\` : Le salon basique où tous les invités à la fête peuvent discuter par défaut.
-- \`#Date: ...\` : La date de la soirée.
+- \`#Date: ...\` : La date de la fête.
 
 ## Informations indispensables pour l'organisateur principal :
 - Ne pas modifier les permissions des salons sans passer par les commandes du bot (sauf pour les permissions de la catégorie). Si vous modifiez les permissions d'un salon, le bot les resynchronisera avec la base de données et les permissions de la catégorie.
-- Lors de la création d'une soirée, invitez d'abord les organisateurs en les assignant comme organisateurs avec la commande adéquate avant d'inviter les invités. (Cela évite que les organisateurs aient accès au contenu du salon \`#sans-orga\`.)
+- Lors de la création d'une fête, invitez d'abord les organisateurs en les assignant comme organisateurs avec la commande adéquate avant d'inviter les invités. (Cela évite que les organisateurs aient accès au contenu du salon \`#sans-orga\`.)
 
 En cas de difficulté ou de suggestions, vous pouvez envoyer un message privé à <@265785336175656970>.`;
             listOptions.push(

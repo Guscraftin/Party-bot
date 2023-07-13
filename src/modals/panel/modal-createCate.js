@@ -3,7 +3,7 @@ const { Party } = require("../../dbObjects");
 const { getValidDate } = require("../../functions");
 
 /**
- * Come from the button "Créer ta soirée" in the file "src\commands\admin\panel.js".
+ * Come from the button "Créer ta fête" in the file "src\commands\admin\panel.js".
  */
 
 module.exports = {
@@ -23,7 +23,7 @@ module.exports = {
 
         // Create the category
         const cate = await interaction.guild.channels.create({
-            name: `Soirée de ${interaction.member.displayName}`,
+            name: `fête de ${interaction.member.displayName}`,
             type: ChannelType.GuildCategory,
             position: 0,
             permissionOverwrites: [
@@ -76,7 +76,7 @@ module.exports = {
         const panelOrganizer = await cate.children.create({
             name: "orga-panel",
             type: ChannelType.GuildText,
-            topic: "Ce salon permet au bot de communiquer avec toi concernant cette soirée. *Notamment si des personnes la quitte.*",
+            topic: "Ce salon permet au bot de communiquer avec toi concernant cette fête. *Notamment si des personnes la quitte.*",
             permissionOverwrites: [
                 {
                     id: interaction.member,
@@ -192,7 +192,7 @@ module.exports = {
         }
 
         return interaction.editReply({
-            content: `J'ai bien créer ta catégorie pour accueillir ta soirée avec ce salon : ${defaultChannel} !`,
+            content: `J'ai bien créer ta catégorie pour accueillir ta fête avec ce salon : ${defaultChannel} !`,
             ephemeral: true,
         });
     },

@@ -4,7 +4,7 @@ const { Party } = require("../../dbObjects");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("salon")
-        .setDescription("Commande pour gérer les salons de ta soirée (sa catégorie) !")
+        .setDescription("Commande pour gérer les salons de ta fête (sa catégorie) !")
         .setDMPermission(false)
         .addSubcommand(subcommand =>
             subcommand.setName("verrouiller")
@@ -28,8 +28,8 @@ module.exports = {
         const party = await Party.findOne({ where: { category_id: cateId } });
         if (!party || (party.organizer_id !== interaction.member.id && !interaction.member.permissions.has(PermissionFlagsBits.Administrator) && !party.organizer_list_id.includes(interaction.member.id))) {
             return interaction.reply({
-                content: "Tu dois être l'organisateur de cette soirée (de cette catégorie) pour pouvoir gérer les invités !" +
-                "\nSi tu es organisateur et que tu veux gérer tes invités, tape cette commande dans la catégorie de ta soirée.",
+                content: "Tu dois être l'organisateur de cette fête (de cette catégorie) pour pouvoir gérer les invités !" +
+                "\nSi tu es organisateur et que tu veux gérer tes invités, tape cette commande dans la catégorie de ta fête.",
                 ephemeral: true,
             });
         }

@@ -16,9 +16,9 @@ module.exports = {
         const member = interaction.member;
 
         const party = await Party.findOne({ where: { category_id: cateId } });
-        if (!party) return interaction.reply({ content: "Une erreur est survenue lors de la récupération de la soirée !", ephemeral: true });
+        if (!party) return interaction.reply({ content: "Une erreur est survenue lors de la récupération de la fête !", ephemeral: true });
 
-        if (!party.guest_list_id.includes(member.id)) return interaction.reply({ content: "Veuillez contacter le propriétaire étant donné qu'une erreur vous empêche de quitter cette soirée !", ephemeral: true });
+        if (!party.guest_list_id.includes(member.id)) return interaction.reply({ content: "Veuillez contacter le propriétaire étant donné qu'une erreur vous empêche de quitter cette fête !", ephemeral: true });
 
         let isOrga = false;
         // Remove the user from the organizer list
@@ -35,7 +35,7 @@ module.exports = {
                 }
             } catch (error) {
                 console.error("leaveCate orga - " + error);
-                return interaction.reply({ content: "Une erreur est survenue lors de votre retrait à cette soirée !", ephemeral: true });
+                return interaction.reply({ content: "Une erreur est survenue lors de votre retrait à cette fête !", ephemeral: true });
             }
 
             isOrga = true;
@@ -60,7 +60,7 @@ module.exports = {
 
         const panelOrga = await interaction.guild.channels.fetch(await party.panel_organizer_id);
         if (panelOrga && !(panelOrga instanceof Collection)) {
-            panelOrga.send(`**<@${member.id}> a quitté la soirée${isOrga ? ", il était organisateur" : ""} !**`);
+            panelOrga.send(`**<@${member.id}> a quitté votre fête${isOrga ? ", il était organisateur" : ""} !**`);
         }
     },
 };

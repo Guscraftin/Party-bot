@@ -9,7 +9,7 @@ module.exports = {
     once: true,
     async execute(client) {
         // Set the client user's activity
-        await client.user.setPresence({ activities: [{ name: "organiser vos soirées !", type: 0 }], status: "online" });
+        await client.user.setPresence({ activities: [{ name: "organiser vos fêtes !", type: 0 }], status: "online" });
 
         // Sync the database
         await Party.sync({ alter: true });
@@ -77,7 +77,7 @@ async function sendDM(client) {
                                 if (member.nickname === null) {
                                     member.send(`## 👋 Salut ${member} !\n\n` +
                                     `> Je viens te voir car __tu n'as toujours pas__ de pseudo sur le serveur discord **\`${guildParty.name}\`**.\n` +
-                                    "> Pour pouvoir organiser tes soirées et être invité, il est nécessaire d'avoir un pseudo sur le serveur.\n" +
+                                    "> Pour pouvoir organiser tes fêtes et être invité, il est nécessaire d'avoir un pseudo sur le serveur.\n" +
                                     `> Pour cela, il te suffit d'aller dans le salon <#${channelPanelId}> et de **cliquer sur le bouton \`✏️・Se renommer\`**.\n` +
                                     "> Pour que ta demande de changement de pseudo soit acceptée, il faut que **ton nouveau pseudo commence par ton vrai prénom**.");
                                 }
@@ -92,7 +92,7 @@ async function sendDM(client) {
                                         member.send(`👋 Salut ${member.username} !\n\n` +
                                         `> Je viens te voir car __tu n'es toujours pas__ sur le serveur discord **\`${guildParty.name}\`**.\n` +
                                         "> Ce serveur **regroupe tous les événements organisés par les personnes présentes sur les même serveurs que toi** !\n" +
-                                        `> Vient donc les rejoindre grâce à cette invitation ${inviteURL} afin que toi aussi tu puisses organiser tes soirées et être invité 🎉 !`);
+                                        `> Vient donc les rejoindre grâce à cette invitation ${inviteURL} afin que toi aussi tu puisses organiser tes fêtes et être invité 🎉 !`);
                                         console.log(`Envoie d'une invite à ${member.displayName}`);
                                     } catch (error) {
                                         console.log(`Impossible d'envoyer une invitation à ${member.displayName}`);

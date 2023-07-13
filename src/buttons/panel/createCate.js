@@ -3,7 +3,7 @@ const { Party } = require("../../dbObjects");
 const { maxParty } = require(process.env.CONST);
 
 /**
- * Come from the button "Créer une soirée" in the file "src\buttons\panel\panel.js".
+ * Come from the button "Créer une fête" in the file "src\buttons\panel\panel.js".
  * Create a new category (party) for the user.
  */
 
@@ -15,14 +15,14 @@ module.exports = {
         const partyCount = await Party.count({ where: { organizer_id: interaction.member.id } });
         if (partyCount && partyCount >= maxParty) {
             return interaction.reply({
-                content: `Tu ne peux plus créer de nouvelles soirées (catégorie) car tu as déjà \`${maxParty}\` catégories.`,
+                content: `Tu ne peux plus créer de nouvelles fêtes (catégorie) car tu as déjà \`${maxParty}\` catégories.`,
                 ephemeral: true,
             });
         }
 
         const modal = new ModalBuilder()
             .setCustomId("modal-createCate")
-            .setTitle("Créer une soirée");
+            .setTitle("Créer une fête");
 
         const dateStartInput = new TextInputBuilder()
             .setCustomId("dateStart")

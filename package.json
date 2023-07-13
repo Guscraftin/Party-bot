@@ -1,7 +1,7 @@
 {
   "name": "party-bot",
-  "version": "1.0.1",
-  "description": "Bot privée pour le hub party",
+  "version": "2.0.1",
+  "description": "Bot privée pour le Party Center",
   "main": "index.js",
   "scripts": {
     "deploy": "node deploy-commands.js",
@@ -28,8 +28,8 @@
     "cron": "2.1.0",
     "discord.js": "^14.11.0",
     "dotenv": "16.3.1",
-    "sequelize": "^6.32.1",
-    "sqlite3": "^5.1.6"
+    "sequelize": "6.32.1",
+    "sqlite3": "5.1.6"
   },
   "devDependencies": {
     "eslint": "^8.26.0",
