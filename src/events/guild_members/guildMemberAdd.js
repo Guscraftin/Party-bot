@@ -22,7 +22,8 @@ module.exports = {
                         .setStyle(ButtonStyle.Link),
                 );
 
-            await member.send({ content: `👋 Bonjour ${member.user.username}, je suis \`Party Bot\`, le bot qui gère le serveur **${member.guild.name}**.\n` +
+            const botName = await member.client.application.fetch(bot => {return bot.name});
+            await member.send({ content: `👋 Bonjour ${member.user.username}, je suis \`${botName}\`, le bot qui gère le serveur **${member.guild.name}**.\n` +
             "Je te contacte pour me présenter et pour te remercier d'avoir rejoint ce serveur.\n\n" +
             "> Sur celui-ci, tu pourras **organiser ta propre fête ou ton propre événement** 🎉 !\n" +
             "> De plus, tu pourras facilement être invité aux fêtes organisées sur le serveur.\n" +
