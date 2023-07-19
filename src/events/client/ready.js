@@ -75,7 +75,7 @@ async function sendDM(client) {
                             // Send DM to invite the member to change his nickname
                             try {
                                 if (member.nickname === null) {
-                                    member.send(`## 👋 Salut ${member} !\n\n` +
+                                    await member.send(`## 👋 Salut ${member} !\n\n` +
                                     `> Je viens te voir car __tu n'as toujours pas__ de pseudo sur le serveur discord **\`${guildParty.name}\`**.\n` +
                                     "> Pour pouvoir organiser tes fêtes et être invité, il est nécessaire d'avoir un pseudo sur le serveur.\n" +
                                     `> Pour cela, il te suffit d'aller dans le salon <#${channelPanelId}> et de **cliquer sur le bouton \`✏️・Se renommer\`**.\n` +
@@ -89,7 +89,7 @@ async function sendDM(client) {
                             try {
                                 if (await guildParty.members.fetch().then(membre => !membre.has(member.id) && !member.user.bot) && blacklistMP.find(userId => userId === member.id) === undefined) {
                                     try {
-                                        member.send(`👋 Salut ${member.username} !\n\n` +
+                                        await member.send(`👋 Salut ${member.username} !\n\n` +
                                         `> Je viens te voir car __tu n'es toujours pas__ sur le serveur discord **\`${guildParty.name}\`**.\n` +
                                         "> Ce serveur **regroupe tous les événements organisés par les personnes présentes sur les même serveurs que toi** !\n" +
                                         `> Vient donc les rejoindre grâce à cette invitation ${inviteURL} afin que toi aussi tu puisses organiser tes fêtes et être invité 🎉 !`);
