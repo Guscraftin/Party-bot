@@ -40,8 +40,7 @@ module.exports = {
         const message = await channel.messages.fetch(messageId).catch(() => null);
         const messagesFetch = await channel.messages.fetchPinned().catch(() => null);
         if (!message || !messagesFetch) return interaction.reply({ content: "Ce message n'existe pas dans ce salon !", ephemeral: true });
-        await messagesFetch.find(m => m.id === messageId);
-        const isMessagePinned = messagesFetch.size !== 0;
+        const isMessagePinned = messagesFetch.some(m => m.id === messageId);
 
 
         // Run the command
