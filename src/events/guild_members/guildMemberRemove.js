@@ -1,6 +1,6 @@
 const { Collection, Events } = require("discord.js");
 const { Party } = require("../../dbObjects");
-const { adminMessageId } = require(process.env.CONST);
+const { adminMessageId, emojiNeutral } = require(process.env.CONST);
 
 /**
  * If a member leave the server in the main server,
@@ -15,7 +15,7 @@ module.exports = {
         // Send a message in the admin channel
         const adminChannel = await member.guild.channels.fetch(adminMessageId);
         if (adminChannel && !(adminChannel instanceof Collection)) {
-            await adminChannel.send(`${member} a quitté le serveur !`);
+            await adminChannel.send(`${member} (\`${member.displayName}\`) a **quitté** le serveur !`);
         }
 
         // Send a message in all organizer channel
@@ -57,8 +57,8 @@ module.exports = {
             // Send a message in main organizer channel
             const panelOrganizerChannel = await member.guild.channels.fetch(party.panel_organizer_id);
             if (panelOrganizerChannel && !(panelOrganizerChannel instanceof Collection)) {
-                await panelOrganizerChannel.send(`**${member} a quitté le serveur !**\n` +
-                `${isOaganizer ? "Il était un des organisateurs de ta fête." : (isGuest ? "Il était sur ta liste d'invité à ta fête." : "") }`);
+                await panelOrganizerChannel.send(`<${emojiNeutral}> **${member} (\`${member.displayName}\`) a quitté le serveur !**\n` +
+                `Il était peut-être un organisateur ou un invité de ta soirée.`);
             }
         });
     },

@@ -9,5 +9,9 @@
     "color_decline": "#9F2727",
     "color_basic": "#0099FF",
 
+    "emojiSuccess": ":Tick_vert:1275806619829010524",
+    "emojiNeutral": ":Neutre:1275806603131621468",
+    "emojiWrong": ":Croix_rouge:1275806583825367153",
+
     "maxParty": 3
 }

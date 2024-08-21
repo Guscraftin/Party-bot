@@ -49,7 +49,7 @@ module.exports = {
             const panelOrganizerChannel = await member.guild.channels.fetch(party.panel_organizer_id);
             if (panelOrganizerChannel && !(panelOrganizerChannel instanceof Collection)) {
                 await panelOrganizerChannel.send(`**${member} a rejoint le serveur !**\n` +
-                `Si tu souhaites l'inviter à ta fête, tu peux désormais le faire avec la commande \`/invite ajouter <@${member.id}>\` !`);
+                `Si tu souhaites l'inviter à ta fête, tu peux désormais le faire avec la commande : \`/invite ajouter <@${member.id}>\``);
             }
         });
     },
