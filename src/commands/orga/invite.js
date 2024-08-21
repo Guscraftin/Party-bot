@@ -1,5 +1,6 @@
-const { PermissionFlagsBits, SlashCommandBuilder } = require("discord.js");
+const { Collection, PermissionFlagsBits, SlashCommandBuilder } = require("discord.js");
 const { Party } = require("../../dbObjects");
+const { emojiSuccess, emojiWrong } = require(process.env.CONST);
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -34,6 +35,7 @@ module.exports = {
             });
         }
 
+        const organizerChannel = await interaction.guild.channels.fetch(party.panel_organizer_id);
         switch (interaction.options.getSubcommand()) {
             /**
              * Add a member to the party as a guest
@@ -42,6 +44,8 @@ module.exports = {
                 if (party.guest_list_id.includes(member.id)) return interaction.reply({ content: `${member} est déjà sur votre liste d'invités à votre fête !`, ephemeral: true });
 
                 await channel.parent.permissionOverwrites.create(member, { ViewChannel: true });
+
+                if (organizerChannel && !(organizerChannel instanceof Collection)) await organizerChannel.send({ content: `<${emojiSuccess}> ${member} a été **ajouté** sur votre liste d'invités pour cette fête !` });
 
                 return interaction.reply({ content: `${member} a bien été ajouté sur votre liste d'invités pour votre fête !`, ephemeral: true });
 
@@ -54,6 +58,8 @@ module.exports = {
                 if (party.organizer_list_id.includes(member.id)) return interaction.reply({ content: `${member} est dans votre liste d'organisateur pour votre fête ! Vous ne pouvez pas le retirer de votre liste d'invités !\nSi vous souhaitez le retirer de votre fête, utilisez la commande \`/orga retirer\` puis refaite cette commande.`, ephemeral: true });
 
                 await channel.parent.permissionOverwrites.delete(member, `Par la volonté de l'organisateur (${member.id}) !`);
+
+                if (organizerChannel && !(organizerChannel instanceof Collection)) await organizerChannel.send({ content: `<${emojiWrong}> ${member} a été **retiré** de votre liste d'invités pour cette fête !` });
 
                 return interaction.reply({ content: `${member} a bien été retiré de votre liste d'invités pour votre fête !`, ephemeral: true });
         }
