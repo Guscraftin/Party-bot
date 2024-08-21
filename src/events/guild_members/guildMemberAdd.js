@@ -1,6 +1,6 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, Collection, Events } = require("discord.js");
 const { Party } = require("../../dbObjects");
-const { channelPanelId } = require(process.env.CONST);
+const { adminMessageId, channelPanelId } = require(process.env.CONST);
 
 /**
  * If a member join the server in the main server,
@@ -11,6 +11,16 @@ module.exports = {
     name: Events.GuildMemberAdd,
     async execute(member) {
         if (member.guild.id !== process.env.GUILD_ID) return;
+
+        // Send a message in the admin channel
+        try {
+            const adminChannel = await member.guild.channels.fetch(adminMessageId);
+            if (adminChannel && !(adminChannel instanceof Collection)) {
+                await adminChannel.send(`${member} a rejoint le serveur !`);
+            }
+        } catch (error) {
+            console.error("guildMemberAdd admin - " + error);
+        }
 
         // Send a welcome message to the new member
         try {
