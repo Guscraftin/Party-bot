@@ -4,15 +4,15 @@ const { Party } = require("../../dbObjects");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("invite")
-        .setDescription("Commande pour gérer les invités dans sa fête (sa catégorie) !")
+        .setDescription("Commande pour gérer les invités dans cette fête (cette catégorie) !")
         .setDMPermission(false)
         .addSubcommand(subcommand =>
             subcommand.setName("ajouter")
-                .setDescription("🎊〢Pour ajouter un membre à sa fête (sa catégorie).")
+                .setDescription("🎊〢Pour ajouter un membre à cette fête (cette catégorie).")
                 .addUserOption(option => option.setName("membre").setDescription("Le membre ou l'id du membre à ajouter").setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand.setName("retirer")
-                .setDescription("🎊〢Pour retirer un membre à sa fête (sa catégorie).")
+                .setDescription("🎊〢Pour retirer un membre à cette fête (cette catégorie).")
                 .addUserOption(option => option.setName("membre").setDescription("Le membre ou l'id du membre à retirer").setRequired(true))),
 
     async execute(interaction) {

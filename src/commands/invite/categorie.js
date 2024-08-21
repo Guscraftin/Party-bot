@@ -11,7 +11,7 @@ module.exports = {
                 .setDescription("👤〢Pour quitter cette fête (cette catégorie)."))
         .addSubcommand(subcommand =>
             subcommand.setName("supprimer")
-                .setDescription("🎉〢Pour supprimer cette fête (sa catégorie).")),
+                .setDescription("🎉〢Pour supprimer ta fête (cette catégorie).")),
 
     async execute(interaction) {
         const party = await Party.findOne({ where: { category_id: interaction.channel.parentId, organizer_id: interaction.member.id } });

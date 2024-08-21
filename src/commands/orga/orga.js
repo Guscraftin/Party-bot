@@ -8,11 +8,11 @@ module.exports = {
         .setDMPermission(false)
         .addSubcommand(subcommand =>
             subcommand.setName("ajouter")
-                .setDescription("🎉〢Pour ajouter un membre à sa fête (sa catégorie).")
+                .setDescription("🎉〢Pour passer un membre au statut d'organisateur dans ta fête (cette catégorie).")
                 .addUserOption(option => option.setName("membre").setDescription("Le membre ou l'id du membre à ajouter").setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand.setName("retirer")
-                .setDescription("🎉〢Pour retirer un membre à sa fête (sa catégorie).")
+                .setDescription("🎉〢Pour passer un organisateur au statut de membre dans ta fête (cette catégorie).")
                 .addUserOption(option => option.setName("membre").setDescription("Le membre ou l'id du membre à retirer").setRequired(true))),
 
     async execute(interaction) {

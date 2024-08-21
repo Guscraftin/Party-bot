@@ -8,14 +8,14 @@ module.exports = {
         .setDMPermission(false)
         .addSubcommand(subcommand =>
             subcommand.setName("épingler")
-                .setDescription("👤〢Pour épingler un message.")
+                .setDescription("👤〢Pour épingler un message dans ce salon.")
                 .addStringOption(option =>
                     option.setName("message")
                         .setDescription("Le message à épingler.")
                         .setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand.setName("désépingler")
-                .setDescription("👤〢Pour désépingler un message.")
+                .setDescription("👤〢Pour désépingler un message dans ce salon.")
                 .addStringOption(option =>
                     option.setName("message")
                         .setDescription("Le message à désépingler.")

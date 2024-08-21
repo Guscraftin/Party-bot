@@ -4,7 +4,7 @@ const { Party } = require("../../dbObjects");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("salon")
-        .setDescription("Commande pour gérer les salons de ta fête (sa catégorie) !")
+        .setDescription("Commande pour gérer les salons de ta fête (ta catégorie) !")
         .setDMPermission(false)
         .addSubcommand(subcommand =>
             subcommand.setName("verrouiller")
@@ -17,7 +17,7 @@ module.exports = {
                 .setDescription("🎊〢Pour créer un nouveau salon."))
         .addSubcommand(subcommand =>
             subcommand.setName("supprimer")
-                .setDescription("🎊〢Pour supprimer un salon.")),
+                .setDescription("🎊〢Pour supprimer ce salon.")),
 
     async execute(interaction) {
         const channelId = interaction.channelId;
