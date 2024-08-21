@@ -1,5 +1,6 @@
 const { Collection } = require("discord.js");
 const { Party } = require("../../dbObjects");
+const { emojiWrong } = require(process.env.CONST);
 
 /**
  * Come from the command "categorie quitter" in the file "src\command\invite\categorie.js".
@@ -61,7 +62,7 @@ module.exports = {
 
         const panelOrga = await interaction.guild.channels.fetch(await party.panel_organizer_id);
         if (panelOrga && !(panelOrga instanceof Collection)) {
-            panelOrga.send(`**<@${member.id}> a quitté votre fête${isOrga ? ", il était organisateur" : ""} !**`);
+            panelOrga.send(`<${emojiWrong}> **${member} a quitté votre fête${isOrga ? ", il était organisateur" : ""} !**`);
         }
     },
 };
