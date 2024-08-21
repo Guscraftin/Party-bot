@@ -14,11 +14,13 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand.setName("retirer")
                 .setDescription("🎊〢Pour retirer un membre à cette fête (cette catégorie).")
-                .addUserOption(option => option.setName("membre").setDescription("Le membre ou l'id du membre à retirer").setRequired(true))),
+                .addUserOption(option => option.setName("membre").setDescription("Le membre ou l'id du membre à retirer").setRequired(true))
+                .addStringOption(option => option.setName("raison").setDescription("La raison du retrait du membre").setRequired(false))),
 
     async execute(interaction) {
         const channel = interaction.channel;
         const member = interaction.options.getMember("membre");
+        const reason = interaction.options.getString("raison");
         const cateId = channel.parentId;
 
         // Check the exception of the member
@@ -59,9 +61,20 @@ module.exports = {
 
                 await channel.parent.permissionOverwrites.delete(member, `Par la volonté de l'organisateur (${member.id}) !`);
 
+                // Send logs to organizers
                 if (organizerChannel && !(organizerChannel instanceof Collection)) await organizerChannel.send({ content: `<${emojiWrong}> ${member} a été **retiré** de votre liste d'invités pour cette fête !` });
 
-                return interaction.reply({ content: `${member} a bien été retiré de votre liste d'invités pour votre fête !`, ephemeral: true });
+                // Send MP to the member
+                const memberDM = await member.createDM();
+                const category = interaction.channel.parent;
+                let mpSend = false;
+                try {
+                    await memberDM.send({ content: `Vous avez été retiré de la liste d'invités de la fête organisé par <@${party.organizer_id}> et nommé \`${category.name}\` ${reason ? `pour la raison suivante : ${reason}` : `` }` });
+                    mpSend = true;
+                } catch {}
+
+                // Response to the organizer
+                return interaction.reply({ content: `${member} a bien été retiré de votre liste d'invités pour votre fête ${reason ? `pour la raison suivante : ${reason} `: ``} !\n${mpSend ? "*Un message privé lui a bien été envoyé.*" : "*Il n'a pas pu recevoir de message privé.*"}`, ephemeral: true });
         }
         return interaction.reply({ content: "Votre interaction a rencontré un problème !", ephemeral: true });
     },

@@ -27,8 +27,8 @@ En tant qu'organisateur principal de votre fête, vous avez les permissions pour
 ## Voici les commandes que vous pouvez utiliser en tant qu'organisateur principal :
 - 🎉 \`/categorie supprimer\` : Vous permet de supprimer votre fête. (OU, vous pouvez également supprimer votre catégorie.)
 - 🎉 \`/date\` : Pour changer la date de votre fête.
-- 🎉 \`/orga ajouter\` : Ajoutez une personne à votre liste des organisateurs. (OU, d'ajouter dans les permissions de la catégorie de votre fête, la permission d'envoyer des messages aux personnes que vous souhaitez ajouter en tant qu'organisateur.)
-- 🎉 \`/orga retirer\` : Retirez une personne de votre liste des organisateurs. (OU, de retirer dans les permissions de la catégorie de votre fête, la permission d'envoyer des messages aux personnes que vous souhaitez retirer de votre liste des organisateurs.)
+- 🎉 \`/orga ajouter\` : Ajouter une personne à votre liste des organisateurs. (OU, d'ajouter dans les permissions de la catégorie de votre fête, la permission d'envoyer des messages aux personnes que vous souhaitez ajouter en tant qu'organisateur.)
+- 🎉 \`/orga retirer\` : Retirer une personne de votre liste des organisateurs. (OU, de retirer dans les permissions de la catégorie de votre fête, la permission d'envoyer des messages aux personnes que vous souhaitez retirer de votre liste des organisateurs.)
 
 En cas de difficulté, vous pouvez envoyer un message privé à <@265785336175656970>.`;
             listOptions.push(
@@ -57,8 +57,8 @@ Vous avez accès aux commandes de <@${process.env.CLIENT_ID}> ayant pour symbole
 En tant que personne faisant partie de la liste des organisateurs, vous avez les permissions suivantes en plus des permissions en tant qu'invité : d'envoyer des messages dans les salons verrouillés, de mentionner tout le monde, de gérer les messages épinglés et les salons.
 
 ## Voici les commandes que vous pouvez utiliser en tant qu'organisateur :
-- 🎊 \`/invite ajouter\` : Ajoutez une personne à la liste d'invités de la fête. (OU, ajoutez dans les permissions de la catégorie de la fête, la permission de voir les salons aux personnes que vous souhaitez ajouter en tant qu'invité.)
-- 🎊 \`/invite retirer\` : Retirez une personne de la liste d'invités de la fête. (OU, retirez dans les permissions de la catégorie de la fête, la permission de voir les salons aux personnes que vous souhaitez retirer de la liste d'invités.)
+- 🎊 \`/invite ajouter\` : Ajouter une personne à la liste d'invités de la fête. (OU, ajoutez dans les permissions de la catégorie de la fête, la permission de voir les salons aux personnes que vous souhaitez ajouter en tant qu'invité.)
+- 🎊 \`/invite retirer\` : Retirer une personne de la liste d'invités de la fête. Celle-ci sera avertie en message privé si elle les a activés. (OU, retirez dans les permissions de la catégorie de la fête, la permission de voir les salons aux personnes que vous souhaitez retirer de la liste d'invités.)
 - 🎊 \`/salon verrouiller\` : Retirer la permission d'envoyer des messages aux invités qui ne font pas partie de la liste des organisateurs. [NE PAS MODIFIER LES PERMISSIONS DES SALONS SANS PASSER PAR LES COMMANDES DU BOT]
 - 🎊 \`/salon déverrouiller\` : Mettre la permission d'envoyer des messages aux invités. [NE PAS MODIFIER LES PERMISSIONS DES SALONS SANS PASSER PAR LES COMMANDES DU BOT]
 - 🎊 \`/salon créer\` : Créer un salon dans la catégorie de la fête.
