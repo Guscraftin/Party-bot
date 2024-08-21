@@ -37,10 +37,10 @@ async function getValidDate(startDate, endDate, interaction) {
     ];
 
     if (monthStart === monthEnd) {
-        if (dayStart === dayEnd) return `Date: ${dayStart} ${months[parseInt(monthStart, 10) - 1]} ${yearStart}`;
-        else return `Date: ${dayStart}-${dayEnd} ${months[parseInt(monthStart, 10) - 1]}`;
+        if (dayStart === dayEnd) return `Date: ${dayStart} ${months[parseInt(monthStart, 10) - 1]} ${yearEnd}`;
+        else return `Date: ${dayStart}-${dayEnd} ${months[parseInt(monthStart, 10) - 1]} ${yearEnd}`;
     } else {
-        return `Date: ${dayStart} ${months[parseInt(monthStart, 10) - 1]} - ${dayEnd} ${months[parseInt(monthEnd, 10) - 1]}`;
+        return `Date: ${dayStart} ${months[parseInt(monthStart, 10) - 1]} - ${dayEnd} ${months[parseInt(monthEnd, 10) - 1]} ${yearEnd}`;
     }
 }
 
