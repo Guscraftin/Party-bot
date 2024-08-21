@@ -1,6 +1,7 @@
 const { ChannelType, PermissionFlagsBits } = require("discord.js");
 const { Party } = require("../../dbObjects");
 const { getValidDate } = require("../../functions");
+const { channelPanelId } = require(process.env.CONST);
 
 /**
  * Come from the button "Créer ta fête" in the file "src\commands\admin\panel.js".
@@ -72,9 +73,10 @@ module.exports = {
             ],
         }).then(categorie => categorie).catch(console.error);
 
+        // Create the channels
         const cateId = cate.id;
         const panelOrganizer = await cate.children.create({
-            name: "orga-panel",
+            name: "organisateurs-panel",
             type: ChannelType.GuildText,
             topic: "Ce salon permet au bot de communiquer avec toi concernant cette fête. *Notamment si des personnes la quitte.*",
             permissionOverwrites: [
@@ -112,7 +114,7 @@ module.exports = {
             ],
         });
         const channel_organizer_only = await cate.children.create({
-            name: "orga-only",
+            name: "organisateurs-only",
             type: ChannelType.GuildText,
             topic: "Ce salon offre aux organisateurs un espace privé réservé exclusivement à eux.",
             permissionOverwrites: [
@@ -137,7 +139,7 @@ module.exports = {
             ],
         });
         const withoutOrgaChannel = await cate.children.create({
-            name: "sans-orga",
+            name: "sans-organisateurs",
             type: ChannelType.GuildText,
             topic: "Ce salon permet aux personnes de discuter sans organisateur.",
             permissionOverwrites: [
@@ -178,6 +180,15 @@ module.exports = {
             ],
         });
 
+        // Send messages
+        const welcomeMessage = await panelOrganizer.send({
+            content: `||@everyone||\n**Bienvenue dans la catégorie de la fête de \`${interaction.member.displayName}\` !**\nIci, tu pourras voir les personnes qui ont rejoint ou quitté ta fête grâce aux messages comportant des emojis.\n\nPour **inviter des personnes**, utilise **la commande \`/invite\` du bot** suivi de leur pseudo.\n*Si tu souhaites plus d'informations, fait un tour dans la documentation disponible au niveau du <#${channelPanelId}>.*`,
+        });
+        await welcomeMessage.pin();
+        const lastMessage = await panelOrganizer.messages.fetch({ limit: 1 }).then(messages => messages.first());
+        await lastMessage.delete();
+
+        // Update the database
         try {
             await Party.create({
                 category_id: cateId,
@@ -191,8 +202,9 @@ module.exports = {
             console.error("createCate - " + error);
         }
 
+        // Answer to the user
         return interaction.editReply({
-            content: `J'ai bien créer ta catégorie pour accueillir ta fête avec ce salon : ${defaultChannel} !`,
+            content: `J'ai bien créer ta catégorie pour accueillir ta fête. Commence par faire un tour dans ${panelOrganizer} !`,
             ephemeral: true,
         });
     },
