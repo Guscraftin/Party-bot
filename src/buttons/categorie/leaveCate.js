@@ -18,7 +18,8 @@ module.exports = {
         const party = await Party.findOne({ where: { category_id: cateId } });
         if (!party) return interaction.reply({ content: "Une erreur est survenue lors de la récupération de la fête !", ephemeral: true });
 
-        if (!party.guest_list_id.includes(member.id)) return interaction.reply({ content: "Veuillez contacter le propriétaire étant donné qu'une erreur vous empêche de quitter cette fête !", ephemeral: true });
+        const bot = await interaction.client.application.fetch();
+        if (!party.guest_list_id.includes(member.id)) return interaction.reply({ content: `Veuillez contacter <@${bot.owner.id}> car un problème de permissions vous empêche de quitter cette fête !`, ephemeral: true });
 
         let isOrga = false;
         // Remove the user from the organizer list
